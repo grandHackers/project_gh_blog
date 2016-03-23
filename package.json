@@ -1,0 +1,51 @@
+{
+  "name": "MeetflixFrontPage",
+  "version": "0.0.1",
+  "description": "Meet Front Page",
+  "main": "src/server/server.js",
+  "repository": "",
+  "scripts": {
+    "build": "npm run build:app",
+    "build:app": "webpack",
+    "prestart": "npm run build",
+    "start": "babel-node --presets es2015 ./src/server/server.js",
+    "watch": "webpack --watch",
+    "dev": "parallelshell 'npm run watch' 'nodemon ./src/server/server.js --watch src --exec babel-node --presets es2015'"
+  },
+  "dependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "body-parser": "^1.14.2",
+    "bootstrap": "^3.3.6",
+    "cuid": "^1.2.4",
+    "deepmerge": "^0.2.10",
+    "ejs": "^2.3.4",
+    "eslint": "^1.10.3",
+    "eslint-loader": "^1.2.0",
+    "express": "^4.13.3",
+    "express-less": "0.0.8",
+    "jquery": "^2.2.0",
+    "json-loader": "^0.5.4",
+    "json-pretty": "0.0.1",
+    "lodash": "^2.4.1",
+    "mongoose": "^4.4.9",
+    "react": "^0.14.2",
+    "react-bootstrap": "^0.28.2",
+    "react-dom": "^0.14.2",
+    "request": "^2.69.0"
+  },
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.1",
+    "file-loader": "^0.8.5",
+    "img-loader": "^1.2.2",
+    "json-loader": "^0.5.4",
+    "less": "^2.6.1",
+    "nodemon": "^1.8.1",
+    "parallelshell": "^2.0.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.3"
+  }
+}
