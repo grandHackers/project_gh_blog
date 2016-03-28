@@ -19,8 +19,8 @@ app.get('/', (req, res, next) => {
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
-// Connect to db
-mongoose.connect('mongodb://localhost/simple-blog');
+// Connect to db remotely - expecting a docker instance
+mongoose.connect('mongodb://mongo/blog');
 
 // API
 app.use('/users', users);
