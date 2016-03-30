@@ -25,6 +25,6 @@ Notes
 =====
 03/30/2016:
 - So far nothing fancy, only one API action ("GET" for user) present
-- Server supports GET on 'users/<userid>', '/posts/<username>' 
+- Server supports GET on 'users/:userid', '/posts/:username' 
 - Frontend only has basic main feed page where it gets the feed with an ajax GET call to the server
 - Currently just importing sample data for user and posts into the db
