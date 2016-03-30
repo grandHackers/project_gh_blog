@@ -6,23 +6,32 @@ import config from '../../config/config.js';
 import mongoose from 'mongoose';
 import { users, posts } from './routes'
 
+// Allow user to specify the host and port of mongod
+// ex: node server.js --db-path <localhost:27017>
+var commandLineArgs = require('command-line-args');
+var cli = commandLineArgs([
+    { name: 'db-address', alias:'d', type: String, defaultValue: 'localhost:27017'}
+])
+var options = cli.parse()
+
+var dbAddress = options['db-address'].split(':');
+var dbConfig = { 
+    host: dbAddress[0], 
+    port: dbAddress.length > 1 ? dbAddress[1] : '27017',
+    db: 'blog'
+ };
+
 // Setup DB by
 // Importing data into the collections users and posts
 var sys = require('sys');
 var exec = require('child_process').exec;
 
-var mongoConfig = { 
-    host: 'localhost', 
-    port: '27017',
-    db: 'blog'
- };
-
 var importUserDataCmd = (
-    'mongoimport --host ' + mongoConfig.host + 
-    ' --port ' + mongoConfig.port + 
-    ' --db ' + mongoConfig.db +  
+    'mongoimport --host ' + dbConfig.host + 
+    ' --port ' + dbConfig.port + 
+    ' --db ' + dbConfig.db +  
     ' --collection users --drop ' + 
-    ' --file ./config/users.json' + 
+    ' --file ./test-setup/users.json' + 
     ' --jsonArray'
 );
 exec(importUserDataCmd, function(err, stdout, stderr) {
@@ -34,11 +43,11 @@ exec(importUserDataCmd, function(err, stdout, stderr) {
 });
 
 var importPostDataCmd = (
-    'mongoimport --host ' + mongoConfig.host + 
-    ' --port ' + mongoConfig.port + 
-    ' --db ' + mongoConfig.db +      
+    'mongoimport --host ' + dbConfig.host + 
+    ' --port ' + dbConfig.port + 
+    ' --db ' + dbConfig.db +      
     ' --collection posts --drop ' + 
-    ' --file ./config/posts.json' +
+    ' --file ./test-setup/posts.json' +
     ' --jsonArray'
 );
 exec(importPostDataCmd, function(err, stdout, stderr) {
@@ -51,9 +60,9 @@ exec(importPostDataCmd, function(err, stdout, stderr) {
 
 // Connect to db remotely - expecting a docker instance
 mongoose.connect('mongodb://' + 
-    mongoConfig.host + ':' +
-    mongoConfig.port + '/' +
-    mongoConfig.db);
+    dbConfig.host + ':' +
+    dbConfig.port + '/' +
+    dbConfig.db);
 
 
 var app = express();
