@@ -41,6 +41,7 @@ function validateEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
 
+// TODO add validation for unique username
 
 var User = mongoose.model('User', userSchema);
 export default User;

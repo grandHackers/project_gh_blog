@@ -10,7 +10,7 @@ export default class FeedItem extends React.Component {
             <li>
                 <div>
                     <h3>{this.props.title}</h3>
-                    <span>{this.props.date}</span>
+                    <span>{this.props.createdAt}</span>
                     <p>{this.props.content}</p>
                 </div>            
             </li>
