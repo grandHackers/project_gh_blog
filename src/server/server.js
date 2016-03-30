@@ -89,10 +89,9 @@ app.get('/', (req, res, next) => {
 // Resources
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );    
-// mouting routers
+// Mouting routers
 app.use('/users', users);
 app.use('/posts', posts);
-
 
 
 app.listen( config.APP_PORT , function() { 
