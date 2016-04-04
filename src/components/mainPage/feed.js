@@ -1,6 +1,6 @@
 import React from 'react';
 import FeedItem from './feed-item';
-import config from '../../../config/config';
+import config from '../../../config/client-config';
 
 // to use $
 require("imports?$=jquery!./feed.js");
@@ -44,7 +44,7 @@ export default class Feed extends React.Component {
         var feedItems = [];
         var feedItemData = this.state.feed;
         feedItemData.forEach(function(item) {
-            feedItems.push(<FeedItem {...item} />);
+            feedItems.  push(<FeedItem {...item} />);
         });
         return (
             <div> <ul> {feedItems} </ul> </div>
