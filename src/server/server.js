@@ -1,10 +1,13 @@
 import express from 'express';
 import expressLess from 'express-less';
 import path from 'path';
+import util from 'util';
 import config from '../../config/config.js';
 
 import mongoose from 'mongoose';
 import { users, posts } from './routes'
+import populateDB from '../../test-setup/populate-db';
+
 
 // Allow user to specify the host and port of mongod
 // ex: node server.js --db-path <localhost:27017>
@@ -21,58 +24,16 @@ var dbConfig = {
     db: 'blog'
  };
 
-console.log(dbConfig);
-
-// Setup DB by
-// Importing data into the collections users and posts
-var sys = require('sys');
-var exec = require('child_process').exec;
-
-var importUserDataCmd = (
-    'mongoimport --host ' + dbConfig.host + 
-    ' --port ' + dbConfig.port + 
-    ' --db ' + dbConfig.db +  
-    ' --collection users --drop ' + 
-    ' --file ./test-setup/users.json' + 
-    ' --jsonArray'
-);
-exec(importUserDataCmd, function(err, stdout, stderr) {
-    sys.print('stdout: ' + stdout);
-    sys.print('stderr: ' + stderr);
-    if (err !== null) {
-        console.error('exec error: ' + err);
-    }        
-});
-
-var importPostDataCmd = (
-    'mongoimport --host ' + dbConfig.host + 
-    ' --port ' + dbConfig.port + 
-    ' --db ' + dbConfig.db +      
-    ' --collection posts --drop ' + 
-    ' --file ./test-setup/posts.json' +
-    ' --jsonArray'
-);
-exec(importPostDataCmd, function(err, stdout, stderr) {
-    sys.print('stdout: ' + stdout);
-    sys.print('stderr: ' + stderr);
-    if (err !== null) {
-        console.error('exec error: ' + err);
-    }        
-});
-
 // Connect to db remotely - expecting a docker instance
 try {
-    mongoose.connect('mongodb://' + 
-        dbConfig.host + ':' +
-        dbConfig.port + '/' +
-        dbConfig.db);    
+    var mongoUrl = util.format("mongodb://%s:%s/%ds", dbConfig.host, dbConfig.port, dbConfig.db);
+    mongoose.connect(mongoUrl); 
 } catch(err) {
     // TODO implement better error handling
     console.log(err);
     throw err;
 }
-
-
+populateDB();
 
 var app = express();
 
