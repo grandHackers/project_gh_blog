@@ -21,6 +21,8 @@ var dbConfig = {
     db: 'blog'
  };
 
+console.log(dbConfig);
+
 // Setup DB by
 // Importing data into the collections users and posts
 var sys = require('sys');
@@ -59,10 +61,17 @@ exec(importPostDataCmd, function(err, stdout, stderr) {
 });
 
 // Connect to db remotely - expecting a docker instance
-mongoose.connect('mongodb://' + 
-    dbConfig.host + ':' +
-    dbConfig.port + '/' +
-    dbConfig.db);
+try {
+    mongoose.connect('mongodb://' + 
+        dbConfig.host + ':' +
+        dbConfig.port + '/' +
+        dbConfig.db);    
+} catch(err) {
+    // TODO implement better error handling
+    console.log(err);
+    throw err;
+}
+
 
 
 var app = express();
@@ -89,7 +98,7 @@ app.get('/', (req, res, next) => {
 // Resources
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );    
-// Mouting routers
+// Mounting routers
 app.use('/users', users);
 app.use('/posts', posts);
 

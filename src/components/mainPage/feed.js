@@ -1,9 +1,11 @@
 import React from 'react';
 import FeedItem from './feed-item';
+import config from '../../../config/config';
+
+// to use $
 require("imports?$=jquery!./feed.js");
 
-// define server url
-var serverUrl = "http://localhost:8080/posts/";
+const apiUrl = config.API_URL;
 
 export default class Feed extends React.Component {
     
@@ -26,12 +28,13 @@ export default class Feed extends React.Component {
         var _this = this;
         $.ajax({
             type: "GET",
-            url: serverUrl + "erikay/", 
+            url: apiUrl + "/posts/erikay/", 
             dataType: 'json',
             success: function(data) {
                 _this.setState({feed: data});
             },
             error: function(err) {
+                debugger;
                 console.log('ERROR: ' + err);
             }
         }); 
