@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
-    username: {
+    owner: { // username of the author
         type: String,
         required: true
     },
@@ -20,7 +20,7 @@ var postSchema = new Schema({
 }, {timestamps: {createdAt: 'created_at'}});
 
 // Checking username is correct
-postSchema.path('username').validate( function (username, respond) {
+postSchema.path('owner').validate( function (username, respond) {
     mongoose.model('User').findOne({ username: username }, function (err, user) {
         respond(!!user);
     });

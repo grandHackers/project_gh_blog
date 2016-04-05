@@ -1,5 +1,7 @@
 import express from 'express';
 import expressLess from 'express-less';
+import bodyParser from 'body-parser';
+
 import path from 'path';
 import util from 'util';
 import config from '../../config/config.js';
@@ -7,6 +9,8 @@ import config from '../../config/config.js';
 import mongoose from 'mongoose';
 import { users, posts } from './routes'
 import populateDB from '../../test-setup/populate-db';
+
+
 
 
 // Allow user to specify the host and port of mongod
@@ -26,7 +30,8 @@ var dbConfig = {
 
 // Connect to db remotely - expecting a docker instance
 try {
-    var mongoUrl = util.format("mongodb://%s:%s/%ds", dbConfig.host, dbConfig.port, dbConfig.db);
+    var mongoUrl = util.format("mongodb://%s:%s/%s", dbConfig.host, dbConfig.port, dbConfig.db);
+    console.log(mongoUrl);
     mongoose.connect(mongoUrl); 
 } catch(err) {
     // TODO implement better error handling
@@ -52,14 +57,18 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain); */
 
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 // Serve HTML
 app.get('/', (req, res, next) => {
     res.render(path.resolve(__dirname, '..' , '..', 'views', 'index.ejs'), { main_js: 'main.js', main_css: 'main.css'});
 });
 // Resources
 app.use("/", express.static( __dirname + "/../../public/"));
-app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );    
-// Mounting routers
+app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
+    
+// Mount routers
 app.use('/users', users);
 app.use('/posts', posts);
 

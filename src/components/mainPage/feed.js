@@ -23,28 +23,23 @@ export default class Feed extends React.Component {
     }
     
     getFeedData() {
-        // TODO make an api call to get feed data
-        // TODO install jquery
         var _this = this;
-        $.ajax({
+        var get = $.ajax({
             type: "GET",
             url: apiUrl + "/posts/erikay/", 
             dataType: 'json',
-            success: function(data) {
-                _this.setState({feed: data});
-            },
-            error: function(err) {
-                debugger;
-                console.log('ERROR: ' + err);
-            }
-        }); 
+        }).done( function (data) {
+            _this.setState({feed: data});
+        }).fail( function (err) {
+            console.log('ERROR: ' + err);            
+        });
     }
         
     render() {
         var feedItems = [];
         var feedItemData = this.state.feed;
         feedItemData.forEach(function(item) {
-            feedItems.  push(<FeedItem {...item} />);
+            feedItems.push(<FeedItem {...item} />);
         });
         return (
             <div> <ul> {feedItems} </ul> </div>
