@@ -1,44 +1,23 @@
-import React from 'react';
-import FeedItem from './feed-item';
+import React, { Component, PropTypes } from 'react'
+import FeedItem from './FeedItem';
 import config from '../../../config/client-config';
 
-// to use $
-require("imports?$=jquery!./feed.js");
 
-const apiUrl = config.API_URL;
-
-export default class Feed extends React.Component {
+export default class Feed extends Component {
     
     constructor(props) {
+        // props : fetchPosts, posts
         super(props);
-        this.state = {feed: []};
-        this.getFeedData = this.getFeedData.bind(this);
     }
     
     componentDidMount() {
-        // TODO this should dispatch some action
-        // to get the feed data
-        // implementing this correctly later when redux is used
-        this.getFeedData();
-    }
-    
-    getFeedData() {
-        var _this = this;
-        var get = $.ajax({
-            type: "GET",
-            url: apiUrl + "/posts/erikay/", 
-            dataType: 'json',
-        }).done( function (data) {
-            _this.setState({feed: data});
-        }).fail( function (err) {
-            console.log('ERROR: ' + err);            
-        });
+        // fetching only posts owned by currentUser at this point..
+        this.props.fetchPosts(this.props.currentUser);
     }
         
     render() {
         var feedItems = [];
-        var feedItemData = this.state.feed;
-        feedItemData.forEach(function(item) {
+        this.props.posts.forEach(function(item) {
             feedItems.push(<FeedItem {...item} />);
         });
         return (
@@ -46,4 +25,9 @@ export default class Feed extends React.Component {
         );
     }    
     
+}
+
+Feed.PropTypes = {
+    fetchPosts: PropTypes.func.isRequired,
+    posts: PropTypes.array.isRequired 
 }

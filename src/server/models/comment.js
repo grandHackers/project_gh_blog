@@ -21,7 +21,7 @@ var commentSchema = new Schema({
    parent_id: {
        type: String
     } 
-}, {timestamps: {createdAt: 'created_at'}});
+}, {timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 
 var Comment = mongoose.model('Comment', commentSchema);

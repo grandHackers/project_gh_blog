@@ -1,18 +1,13 @@
 import React from 'react';
-
-import NavBar from '../common/navbar';
-import Footer from '../common/footer';
-import Feed from './feed';
-import AddPostForm from './add-post-form';
+import NavBar from '../common/Navbar';
+import Footer from '../common/Footer';
+import Feed from '../../containers/Feed';
+import AddPostForm from '../../containers/AddPostForm';
 
 export default class View extends React.Component {
-
     constructor(props) {
         super(props);
     }
-
-    componentDidMount() {}
-    
     render() { 
         return (
             <div>
@@ -23,5 +18,4 @@ export default class View extends React.Component {
             </div>
         );
     }
-
 }

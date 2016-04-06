@@ -17,7 +17,7 @@ var postSchema = new Schema({
         required: true,
         maxlength: 1200
     }
-}, {timestamps: {createdAt: 'created_at'}});
+}, {timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 // Checking username is correct
 postSchema.path('owner').validate( function (username, respond) {

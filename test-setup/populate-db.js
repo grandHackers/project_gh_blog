@@ -1,6 +1,10 @@
 import assert from 'assert';
 import mongoose from 'mongoose';
 
+// WARNING
+// Currently injecting the data this way does not auto-generate
+// the created_at and updated_at timestamps
+
 export default function populateDB() {
     // populate with dummy data
     var User = mongoose.model('User');
