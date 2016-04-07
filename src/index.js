@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import App from './components/mainPage/View'
+import App from './components/mainPage/Main'
 import configureStore from './store/configureStore'
 
 var initialStore = {

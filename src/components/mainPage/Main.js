@@ -4,7 +4,7 @@ import Footer from '../common/Footer';
 import Feed from '../../containers/Feed';
 import AddPostForm from '../../containers/AddPostForm';
 
-export default class View extends React.Component {
+export default class Main extends React.Component {
     constructor(props) {
         super(props);
     }
