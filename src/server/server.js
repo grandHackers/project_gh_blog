@@ -8,7 +8,6 @@ import config from '../../config/config.js';
 
 import mongoose from 'mongoose';
 import { users, posts } from './routes'
-import populateDB from '../../test-setup/populate-db';
 
 
 
@@ -38,7 +37,6 @@ try {
     console.log(err);
     throw err;
 }
-populateDB();
 
 var app = express();
 
