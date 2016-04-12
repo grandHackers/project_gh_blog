@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import config from '../../../config/client-config';
 
-// Look into Uncontrolled Components
 
 export default class AddPostForm extends Component {
     constructor(props) {
@@ -34,11 +33,13 @@ export default class AddPostForm extends Component {
                     name='title' 
                     type='text'
                     value={this.state.title} 
+                    onChange={this.handleTitleChange}  
                 />
                 <input 
                     name='content' 
                     type='text'
                     value={this.state.content} 
+                    onChange={this.handleContentChange}   
                 />
                 <button type='submit'> Add a New Post </button>
             </form>

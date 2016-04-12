@@ -18,6 +18,9 @@ var commentSchema = new Schema({
        minlength: 1,
        maxlength: 500
     },
+   parent_id: {
+       type: String
+    } 
 }, {timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 
@@ -29,6 +32,15 @@ commentSchema.path('owner').validate( function(username, respond) {
         respond(!!user);
     });
 }, "The username doesn't exist!");
+
+// Checking that comment with parent_id exists
+commentSchema.path('parent_id').validate( function (parentId, respond) {
+    Comment.findById({ _id: parentId }, function (err, comment) {
+        // TODO need to also check that post_id of the parent_id 
+        // is the same
+        respond(!!comment);
+    });     
+}, "The parent comment doesn't exist!");
 
 // Check that a post document of post_id exists
 commentSchema.path('post_id').validate( function (postId, respond) {
