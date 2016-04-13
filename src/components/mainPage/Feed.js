@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import FeedItem from './FeedItem';
-import config from '../../../config/client-config';
 
 
 export default class Feed extends Component {
@@ -16,10 +15,7 @@ export default class Feed extends Component {
     }
         
     render() {
-        var feedItems = [];
-        this.props.posts.forEach(function(item) {
-            feedItems.push(<FeedItem {...item} />);
-        });
+        var feedItems = this.props.posts.map( item => <FeedItem {...item} /> )
         return (
             <div> <ul> {feedItems} </ul> </div>
         );

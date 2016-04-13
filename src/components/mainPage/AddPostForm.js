@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import config from '../../../config/client-config';
 
 
 export default class AddPostForm extends Component {
