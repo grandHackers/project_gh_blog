@@ -3,12 +3,11 @@ import expressLess from 'express-less'
 import bodyParser from 'body-parser'
 import path from 'path'
 import util from 'util'
-
-import logger from './log.js'
-import config from '../../config/config.js'
-
+var winston = require('winston')
 import mongoose from 'mongoose'
 
+import config from '../../config/config.js'
+import configureLogger from './log.js'
 import { users, posts } from './routes'
 
 // TODO remove this once db-address is instead coming from config file
@@ -27,6 +26,10 @@ var dbConfig = {
     db: 'blog'
  };
 
+ 
+//console.log(config)
+var logger = winston
+
 function connectToDB(dbConfig) {
     // assume logger is globally available
     try {
@@ -39,7 +42,11 @@ function connectToDB(dbConfig) {
         throw err
     }
 }
-connectToDB(dbConfig)
+
+configureLogger(config)
+    .then(() => connectToDB(dbConfig))
+    .catch(err => console.log(err))
+
 
 var app = express()
 
