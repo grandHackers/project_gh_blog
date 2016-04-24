@@ -14,22 +14,20 @@ function getLogger() {
             proc.exit(-1);
         }
     }    
-    const dateObj = new Date();
-    const date = dateObj.getFullYear() + dateObj.getMonth() + dateObj.getDay()
     const logFilePrefix = "blog"
-
-    var logger = winston    
+    
+    var logger = winston
     logger
         .add(winston.transports.File,
             {
                 name: 'info-file',
-                filename: logDirPath + logFilePrefix + '-info' + date + '.log',
+                filename: logDirPath + logFilePrefix + '-info' + '.log',
                 level: 'info'            
             })
         .add(winston.transports.File,
             {
                 name: 'error-file',
-                filename: logDirPath + logFilePrefix + '-error' + date + 'log',
+                filename: logDirPath + logFilePrefix + '-error' + 'log',
                 level: 'error'
             })
         .add(winston.transports.Console, 
