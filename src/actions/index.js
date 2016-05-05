@@ -1,15 +1,13 @@
 import fetch from 'isomorphic-fetch'
-
-// ? : Should I create separate action creators that handle
-//     when I fetch / create my OWN posts?
-// for now just make it simple and assume i'm only fetching my posts...
+import process from 'process'
 
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
 export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
-const apiUrl = ""
+import config from '../../config/config.js'
+const apiUrl = config.API_URL
 
 export function requestGetPosts(owner) {
   return {

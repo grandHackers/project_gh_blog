@@ -13,8 +13,8 @@ export default class NavBar extends React.Component {
     }
 
     render() { 
-        var logoPath = "/images/backgom.jpg"; 
-        var linkToMain = "/"
+        var logoPath = "images/backgom.jpg"; 
+        var linkToMain = ""
         // TODO Let react router take care of this eventually
         var sessionLink = "/signin";
         var sessionText = "Sign in";

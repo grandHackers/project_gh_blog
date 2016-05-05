@@ -5,7 +5,7 @@
   "main": "src/server/server.js",
   "repository": "",
   "scripts": {
-    "build": "npm run build:app",
+    "build": "node generate-config.js; npm run build:app",
     "build:app": "webpack",
     "prestart": "npm run build",
     "start": "babel-node --presets es2015 ./src/server/server.js",
