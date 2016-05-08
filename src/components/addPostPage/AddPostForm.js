@@ -1,26 +1,51 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import TextField from 'material-ui/lib/TextField'
+import RaisedButton from 'material-ui/lib/raised-button'
 
 export default class AddPostForm extends Component {
     constructor(props, context) {
         super(props)
         context.router
+        this.style = {
+            titleInput: {
+                display: 'block',
+                width: '50%',
+                margin: 'auto',
+                fontSize: '32px',
+                fontWeight: 'bold',  
+            },
+            contentInput: {
+                display: 'block',
+                width: '50%',
+                margin: 'auto'
+            },
+            button: {
+              display: 'block',
+              width: '10%',
+              margin: 'auto',
+                
+            }
+        }
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit(event) {
-        event.preventDefault()
-        console.log("Adding New Post")        
-
+        event.preventDefault()       
         const title = this.refs.title.getValue()
         const content = this.refs.content.getValue() 
+        // TODO add proper validation
         
-        this.props.addNewPost(title, content)
-        
-        console.log("Going back to main feed page")
-        const path = '/'
-        this.context.router.push(path)        
+        if (title && content) {
+            console.log("Adding New Post")             
+            this.props.addNewPost(title, content)
+            console.log("Going back to main feed page")
+            const path = '/'
+            this.context.router.push(path)            
+        }
+        else {
+            alert('Must provide both title and content.')
+        }
         
     }
         
@@ -30,18 +55,24 @@ export default class AddPostForm extends Component {
                 <form action="" onSubmit={this.handleSubmit}>
                     <TextField 
                         hintText="Title"
-                        ref='title'/>
+                        ref='title'
+                        style={this.style.titleInput}/>
                     <br />
                     <TextField
                         name='content'
-                        hintText="Write your story here..."
+                        floatingLabelText="Write your story here..."
                         multiLine={true}
                         rows={10}
                         ref='content'
+                        style={this.style.contentInput}
                         />
                     <br />                
-
-                    <button type='submit'>Add Post</button>
+                    <RaisedButton 
+                        label="Publish" 
+                        primary={true} 
+                        style={this.style.button} 
+                        onClick={this.handleSubmit}
+                    />
                 </form>
             </div>
         );
