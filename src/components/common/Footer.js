@@ -4,7 +4,11 @@ export default class Footer extends React.Component {
     render() {
         return (
             <footer>
-                <p> Simple Blog </p> 
+                <ul>
+                    <li> <a href='#'> SimpleBlog </a> </li>
+                    <li> <a href='#'> Leave feedback </a> </li>
+                    <li> <a href='#'> Contact </a> </li>
+                </ul>
             </footer>            
         );
     }

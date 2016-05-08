@@ -26,23 +26,22 @@ connectToDB(config.DB_HOST, config.DB_PORT, config.DB_NAME)
 
 
 var app = express()
-
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-
-// Serve HTML
-app.get('/', (req, res, next) => {
-    res.render(path.resolve(__dirname, '..' , '..', 'views', 'index.ejs'), 
-               { main_js: 'main.js', main_css: 'main.css', api_url: config.API_URL});
-});
 // Resources
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
-    
-// Mount routers
-app.use('/users', users);
-app.use('/posts', posts);
+
+// Mount routers (API)
+app.use('/api/users', users);
+app.use('/api/posts', posts);
+
+// Serve HTML
+app.get('*', (req, res, next) => {
+    res.render(path.resolve(__dirname, '..' , '..', 'views', 'index.ejs'), 
+               { main_js: 'main.js', main_css: 'main.css', subdir_url: config.SUBDIR_URL});
+});
 
 app.listen( config.APP_PORT , function() { 
     logger.log('info', 'Listening on ' + config.APP_PORT + '...')    

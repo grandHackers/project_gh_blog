@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { createPost } from '../actions'
-import AddPostForm from '../components/mainPage/AddPostForm'
+import AddPostForm from '../components/addPostPage/AddPostForm'
 
 // Currently assuming that current feed only consists of posts
 // of the current user

@@ -1,43 +1,73 @@
-import React from 'react';
+import React from 'react'
+import { Link } from 'react-router'
+import AppBar from 'material-ui/lib/app-bar'
+import FlatButton from 'material-ui/lib/flat-button'
 
 export default class NavBar extends React.Component {
-    // logo with a link
-    // sign in or sign out button
-
-    constructor(props) {
+    constructor(props, context) {
         super(props);
+        context.router
+        this.loadAddPostForm = this.loadAddPostForm.bind(this)
+        this.showAddPostPageButton = this.showAddPostPageButton.bind(this)
+        this.styles = {
+            root: {   
+                position: "fixed"
+            },
+            title: {
+                cursor: 'pointer'
+            },
+            button: {
+                color: 'white'
+            }
+        }
+    }
+    
+    handleSignout() {
+        //
+        console.log("sign out button touched/clicked!")
+    }
+    
+    loadAddPostForm() {
+        console.log("Clicked on Add post!")
+        const path = '/addPost'
+        this.context.router.push(path)
     }
 
-    componentDidMount() {
-        // probably not needed for this component.
-    }
-
-    render() { 
-        var logoPath = "images/backgom.jpg"; 
-        var linkToMain = ""
-        // TODO Let react router take care of this eventually
-        var sessionLink = "/signin";
-        var sessionText = "Sign in";
-        
-        if (this.props.signedIn) {
-            sessionLink = "/signout";
-            sessionText = "Sign out";
-        }
-        
-        // blocking link since we don't have the
-        // sign in/out mechanism in place yet
-        var blockRoute = function(event) {
-            event.preventDefault();
-            console.log('clicked a link!');
-        }
-        
-        // Render
+    showAddPostPageButton() {
+        // TODO need to get the current route name
+        // and render the add post page button if current route is at the index
         return (
-            <div>
-                <a href={linkToMain} onClick={blockRoute}> <img src={logoPath}/> </a>
-                <a href={sessionLink} onClick={blockRoute}>{sessionText}</a>
-            </div>
-        );
+            <FlatButton
+                label="Write a story"
+                style={this.styles.button}
+                onClick={this.loadAddPostForm}/>)
     }
+    
+    showSignInButton() {
+        // TODO
+        var label = "Sign out"
+        return (
+            <FlatButton 
+                label="Sign out"
+                onClick={this.handleSignout} 
+                style={this.styles.button}/>             
+        )          
+    }
+    
+    render() { 
+        return (
+            <AppBar
+               style={this.styles.root}
+               title={<span style={this.styles.title}> SimpleBlog </span>}
+               showMenuIconButton={false}>
+                {this.showAddPostPageButton()}
+                {this.showSignInButton()}
+            </AppBar>
+        );
 
+    }
+}
+
+NavBar.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }

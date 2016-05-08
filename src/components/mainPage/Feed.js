@@ -17,7 +17,11 @@ export default class Feed extends Component {
     render() {
         var feedItems = this.props.posts.map( item => <FeedItem {...item} /> )
         return (
-            <div> <ul> {feedItems} </ul> </div>
+            <div id='feed-background'>
+                <div className='feed'> 
+                    {feedItems} 
+                </div>
+            </div>
         );
     }    
     
