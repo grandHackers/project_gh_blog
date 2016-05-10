@@ -7,7 +7,7 @@ export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
 export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
 import config from '../../config/config.js'
-const apiUrl = config.API_URL
+//const apiUrl = config.API_URL
 
 export function requestGetPosts(owner) {
   return {
@@ -17,7 +17,6 @@ export function requestGetPosts(owner) {
 }
 
 export function receivePosts(owner, data) {
-  console.log(data);
   return {
     type: RECEIVE_POSTS,
     owner,
@@ -27,9 +26,10 @@ export function receivePosts(owner, data) {
 }
 
 export function fetchPosts(owner) {
+    /* Fetches posts belonging to some owner */
     return function (dispatch) {
         dispatch(requestGetPosts(owner))
-        return fetch(apiUrl + "/posts/" + owner)
+        return fetch(config.API_URL + "/posts/" + owner)
             .then(response => response.json())
             .then(data => 
                   dispatch(receivePosts(owner, data)))
@@ -65,7 +65,7 @@ export function createPost(title, content) {
             content
         }        
         dispatch(requestCreatePost(payload))
-        return fetch(apiUrl + '/posts/' + state.currentUser, {
+        return fetch(config.API_URL + '/posts/' + state.currentUser, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

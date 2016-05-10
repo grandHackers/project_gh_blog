@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
 import TextField from 'material-ui/lib/TextField'
 import RaisedButton from 'material-ui/lib/raised-button'
 
@@ -71,6 +70,7 @@ export default class AddPostForm extends Component {
                         label="Publish" 
                         primary={true} 
                         style={this.style.button} 
+                        ref='submitButton'
                         onClick={this.handleSubmit}
                     />
                 </form>
