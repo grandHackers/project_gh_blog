@@ -1,6 +1,8 @@
 import fetch from 'isomorphic-fetch'
 import process from 'process'
 
+export const SIGN_IN_USER = 'SIGN_IN_USER'
+
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
@@ -8,6 +10,18 @@ export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
 import config from '../../config/config.js'
 //const apiUrl = config.API_URL
+
+/*  User actions  */
+// TODO add unit test!
+export function signInUser(username) {
+    return {
+        type: SIGN_IN_USER,
+        username
+    }
+}
+
+
+/*  Post actions  */
 
 export function requestGetPosts(owner) {
   return {

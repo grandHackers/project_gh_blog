@@ -1,17 +1,18 @@
 import { combineReducers } from 'redux'
 import { 
     RECEIVE_POSTS, 
-    RECEIVE_CREATED_POST, 
+    RECEIVE_CREATED_POST,
+    SIGN_IN_USER 
 } from '../actions';
 
-const posts = (state = [], action) => {
+export const posts = (state = [], action) => {
   switch (action.type) {
     case RECEIVE_POSTS:
         return action.posts
     case RECEIVE_CREATED_POST:
         return [
+            action.post,
             ...state,
-            action.post
         ]
     default:
         // ignore REQUEST_* actions for now
@@ -19,11 +20,11 @@ const posts = (state = [], action) => {
   }
 }
 
-const currentUser = ( state = 'erikay', action ) => {
+export const currentUser = ( state = undefined, action ) => {
     switch (action.type) {
-        // TODO add more actions!
-        case 'blarg': 
-            return action.blarg
+        case SIGN_IN_USER:
+            return action.username
+        // TODO do something for signout
         default:
             return state
     }

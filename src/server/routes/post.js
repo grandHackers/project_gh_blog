@@ -6,6 +6,7 @@ import { getPostsByOwner, createPost } from '../api/post';
 var router = express.Router()
 var logger = require('winston')
 
+// TODO return posts by date (most recent posts should come first)
 /*  GET - /posts/:owner */
 router.get('/:owner', function(req, res, next) {
     const owner = req.params.owner

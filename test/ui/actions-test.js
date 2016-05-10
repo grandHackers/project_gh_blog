@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import * as actions from '../src/actions'
+import * as actions from '../../src/actions'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
 import sinon from 'sinon'
-import config from '../config/config.js'
+import config from '../../config/config.js'
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
