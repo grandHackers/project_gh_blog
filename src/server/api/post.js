@@ -14,7 +14,6 @@ export function getPostsByOwner(owner, callback) {
         find({ owner }).
         sort('-created_at').
         exec(callback)
-        //find({owner: owner}, callback);
 }
 
 export function createPost(owner, title, content, callback) {

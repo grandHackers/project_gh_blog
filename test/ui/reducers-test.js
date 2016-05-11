@@ -63,10 +63,10 @@ describe("Post Reducers", () => {
 describe("User Reducer", () => {
     const reducer = reducers.currentUser
     it('should return initial state', () => {
-        expect(reducer(undefined, {})).to.equal(undefined)
+        expect(reducer(undefined, {})).to.equal('')
     })
     it("should handle SIGN_IN_USER", () => {
-        const currentState = undefined
+        const currentState = ''
         const username = 'user'
         const action = {
             type: actions.SIGN_IN_USER,

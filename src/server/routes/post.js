@@ -8,6 +8,7 @@ var logger = require('winston')
 
 // TODO return posts by date (most recent posts should come first)
 /*  GET - /posts/:owner */
+
 router.get('/:owner', function(req, res, next) {
     const owner = req.params.owner
     logger.log('info', "Getting posts of owner " + owner)
