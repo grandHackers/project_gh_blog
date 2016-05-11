@@ -11,16 +11,20 @@ const config = {
     API_URL:                    env.API_URL || '/api'
 }
 
-// HACK
-function writeConfigToFile(path) {
-    // generate config for client
-    console.log("Writing configuration file to " + path)
-    var content = "export default " + JSON.stringify(config)
-    fs.writeFile(path, content, function (err) {
+const clientConfig = {
+    API_URL: config.API_URL
+}
+
+function writeConfigToFile(config, path) {    
+    console.log("Writing configuration file to " + path)   
+    content = "export default " + JSON.stringify(config)
+    fs.writeFile(path, content, function (err) {        
         if (err) { // TODO log
             throw err; 
         }
-    })    
+     
+    })        
 }
 
-writeConfigToFile(__dirname + "/config/config.js")
+writeConfigToFile(config, __dirname + "/config/server-config.js")
+writeConfigToFile(clientConfig, __dirname + "/config/client-config.js")

@@ -5,7 +5,7 @@ import path from 'path'
 import util from 'util'
 import mongoose from 'mongoose'
 
-import config from '../../config/config.js'
+import config from '../../config/server-config.js'
 import { users, posts } from './routes'
 var logger = require('winston')
 

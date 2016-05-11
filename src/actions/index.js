@@ -9,7 +9,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
 export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
-import config from '../../config/config.js'
+import config from '../../config/client-config.js'
 //const apiUrl = config.API_URL
 
 /*  User actions  */
