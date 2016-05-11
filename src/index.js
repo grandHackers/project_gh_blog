@@ -4,11 +4,11 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import configureStore from './store/configureStore'
-import App from './components/mainPage/Main'
+import App from './containers/Main'
 import AddPostForm from './containers/AddPostForm'
 
 var initialStore = {
-    currentUser: 'erikay',
+    currentUser: '',
     posts: []
 }
 let store = configureStore(initialStore);

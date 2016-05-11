@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 import Post from '../models/post';
-// var post = require('../models/post');
-// var post = mongoose.model('post');
 
 export function getPostById(postId, callback) {
     /* Retrieves a information about a post
@@ -12,7 +10,11 @@ export function getPostById(postId, callback) {
 }
 
 export function getPostsByOwner(owner, callback) {
-    return Post.find({owner: owner}, callback);
+    return Post.
+        find({ owner }).
+        sort('-created_at').
+        exec(callback)
+        //find({owner: owner}, callback);
 }
 
 export function createPost(owner, title, content, callback) {

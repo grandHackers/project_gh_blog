@@ -11,7 +11,8 @@ export default class NavBar extends React.Component {
         this.showAddPostPageButton = this.showAddPostPageButton.bind(this)
         this.styles = {
             root: {   
-                position: "fixed"
+                position: "fixed",
+                top: 0
             },
             title: {
                 cursor: 'pointer'
@@ -20,11 +21,6 @@ export default class NavBar extends React.Component {
                 color: 'white'
             }
         }
-    }
-    
-    handleSignout() {
-        //
-        console.log("sign out button touched/clicked!")
     }
     
     loadAddPostForm() {
@@ -36,20 +32,34 @@ export default class NavBar extends React.Component {
     showAddPostPageButton() {
         // TODO need to get the current route name
         // and render the add post page button if current route is at the index
-        return (
-            <FlatButton
-                label="Write a story"
-                style={this.styles.button}
-                onClick={this.loadAddPostForm}/>)
+        var button;
+        if (!!this.props.currentUser) {
+            button = (
+                <FlatButton
+                    label="Write a story"
+                    style={this.styles.button}
+                    onClick={this.loadAddPostForm}/>)            
+        }
+        return button
     }
     
     showSignInButton() {
-        // TODO
-        var label = "Sign out"
+        // TODO take out hardcoding of the username
+        // after proper sign in is implemented
+        var label;
+        var handler;
+        if (!this.props.currentUser) {
+            label = "Sign in"
+            handler = () => { this.props.signIn('erikay') }
+        } else {
+            label = 'Sign out' 
+            handler = () => { this.props.signOut(this.props.currentUser) }
+        }
+        
         return (
             <FlatButton 
-                label="Sign out"
-                onClick={this.handleSignout} 
+                label={label}
+                onClick={handler} 
                 style={this.styles.button}/>             
         )          
     }

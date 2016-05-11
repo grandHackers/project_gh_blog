@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 import User from '../models/user';
-// var User = require('../models/user');
-// var User = mongoose.model('User');
 
 export function getUser(userId, callback) {
     /* Retrieves a information about a user

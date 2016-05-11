@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import process from 'process'
 
 export const SIGN_IN_USER = 'SIGN_IN_USER'
+export const SIGN_OUT_USER = 'SIGN_OUT_USER'
 
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -16,6 +17,14 @@ import config from '../../config/config.js'
 export function signInUser(username) {
     return {
         type: SIGN_IN_USER,
+        username
+    }
+}
+
+// TODO add unit test!
+export function signOutUser(username) {
+    return {
+        type: SIGN_OUT_USER, 
         username
     }
 }
