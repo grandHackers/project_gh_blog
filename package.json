@@ -10,7 +10,7 @@
     "prestart": "npm run build",
     "start": "babel-node --presets es2015 ./src/server/server.js",
     "watch": "webpack --watch",
-    "dev": "parallelshell 'npm run watch' 'nodemon ./src/server/server.js --watch src --exec babel-node --presets es2015'",
+    "dev": "node generate-config.js; parallelshell 'npm run watch' 'nodemon ./src/server/server.js --watch src --exec babel-node --presets es2015'",
     "test": "mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch"
   },
@@ -46,7 +46,6 @@
     "react-redux": "^4.4.1",
     "react-router": "^2.4.0",
     "react-stub-context": "^0.6.0",
-    "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1",
     "request": "^2.69.0",

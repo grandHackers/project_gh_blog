@@ -12,7 +12,8 @@ const config = {
 }
 
 const clientConfig = {
-    API_URL: config.API_URL
+    API_URL: config.API_URL,
+    SUBDIR_URL: config.SUBDIR_URL
 }
 
 function writeConfigToFile(config, path) {    

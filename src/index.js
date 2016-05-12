@@ -6,6 +6,7 @@ import { createStore } from 'redux'
 import configureStore from './store/configureStore'
 import App from './containers/Main'
 import AddPostForm from './containers/AddPostForm'
+import config from '../config/client-config'
 
 var initialStore = {
     currentUser: '',
@@ -16,8 +17,8 @@ let store = configureStore(initialStore);
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}/>
-      <Route path="/addPost" component={AddPostForm}/>
+      <Route path={config.SUBDIR_URL} component={App}/>
+      <Route path={config.SUBDIR_URL + "/addPost"} component={AddPostForm}/>
     </Router>
   </Provider>,
   document.getElementById('root')
