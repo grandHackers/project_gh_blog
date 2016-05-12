@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import TextField from 'material-ui/lib/TextField'
 import RaisedButton from 'material-ui/lib/raised-button'
+import config from '../../../config/client-config'
 
 export default class AddPostForm extends Component {
     constructor(props, context) {
@@ -39,7 +40,7 @@ export default class AddPostForm extends Component {
             console.log("Adding New Post")             
             this.props.addNewPost(title, content)
             console.log("Going back to main feed page")
-            const path = '/'
+            const path = config.SUBDIR_URL + '/'
             this.context.router.push(path)            
         }
         else {
