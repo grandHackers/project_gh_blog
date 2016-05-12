@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import AppBar from 'material-ui/lib/app-bar'
 import FlatButton from 'material-ui/lib/flat-button'
+import config from '../../../config/client-config'
 
 export default class NavBar extends React.Component {
     constructor(props, context) {
@@ -25,7 +26,7 @@ export default class NavBar extends React.Component {
     
     loadAddPostForm() {
         console.log("Clicked on Add post!")
-        const path = '/addPost'
+        const path = config.SUBDIR_URL + '/addPost'
         this.context.router.push(path)
     }
 
