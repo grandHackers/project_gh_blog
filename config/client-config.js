@@ -1,1 +1,1 @@
-export default {"API_URL":"/gh/blog/api","SUBDIR_URL":"/gh/blog"}
+export default {"API_URL":"/api","SUBDIR_URL":""}

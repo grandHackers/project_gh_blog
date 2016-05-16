@@ -1,8 +1,13 @@
 import fetch from 'isomorphic-fetch'
 import process from 'process'
 
-export const SIGN_IN_USER = 'SIGN_IN_USER'
-export const SIGN_OUT_USER = 'SIGN_OUT_USER'
+export const REQUEST_SESSION_STATUS = 'REQUEST_SESSION_STATUS'
+export const RECEIVE_SESSION_STATUS = 'RECEIVE_SESSION_STATUS'
+
+export const REQUEST_SIGN_IN = 'REQUEST_SIGN_IN'
+export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
+export const REQUEST_SIGN_OUT = 'REQUEST_SIGN_OUT'
+export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
 
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -12,26 +17,77 @@ export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 import config from '../../config/client-config.js'
 //const apiUrl = config.API_URL
 
-/*  User actions  */
-// TODO add unit test!
-export function signInUser(username) {
+export function requestSessionStatus() {
+    return { type: REQUEST_SESSION_STATUS }
+}
+
+export function receiveSessionStatus(status) {
+    var user = status.user
     return {
-        type: SIGN_IN_USER,
-        username
+        type: RECEIVE_SESSION_STATUS,
+        username: (!!user) ? user.username : ''
     }
 }
 
-// TODO add unit test!
-export function signOutUser(username) {
-    return {
-        type: SIGN_OUT_USER, 
-        username
+export function checkSessionStatus() {
+    return (dispatch) => {
+        dispatch(requestSessionStatus())
+        var url = config.SUBDIR_URL + "/checkSession"
+        return fetch(url, {
+            method: 'POST',
+            data: {}
+        }).then(response => response.json())
+          .then(result => dispatch(receiveSessionStatus(result)) )
     }
+}
+
+export function requestSignIn(username) {
+    return {
+        type: REQUEST_SIGN_IN,
+        username
+    }    
+}
+
+export function signInSuccess(user) {
+    return {
+        type: SIGN_IN_SUCCESS,
+        username: user.username || ''
+    }   
+}
+
+export function signIn(username, password) {
+    return (dispatch) => {
+        dispatch(requestSignIn(username))
+        const data = {username, password}
+        return fetch(config.SUBDIR_URL + "/signin", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+          .then(data => dispatch(signInSuccess(data)))
+    }
+}
+
+export function requestSignOut() {
+    return { type: REQUEST_SIGN_OUT }
+}
+
+export function signOut() {
+    return (dispatch) => {
+        dispatch(requestSignOut())
+        return fetch(config.SUBDIR_URL + "/signout", { method: 'POST'})
+          .then(dispatch(signOutSuccess()))
+    }    
+}
+
+export function signOutSuccess() {
+    return { type: SIGN_OUT_SUCCESS }
 }
 
 
 /*  Post actions  */
-
 export function requestGetPosts(owner) {
   return {
     type: REQUEST_GET_POSTS,

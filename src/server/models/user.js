@@ -41,6 +41,14 @@ function validateEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
 
+userSchema.methods.verifyPassword = function(password) {
+    // TODO
+    // later the password field will be hashed
+    // and need to hash the input password and compare against
+    // the corresponding hashed password
+    return this.password === password
+}
+
 // TODO add validation for unique username
 
 var User = mongoose.model('User', userSchema);

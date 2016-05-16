@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { signInUser, signOutUser } from '../actions'
+import { signOut } from '../actions'
 import Navbar from '../components/common/Navbar'
 
 // Currently assuming that current feed only consists of posts
@@ -7,14 +7,13 @@ import Navbar from '../components/common/Navbar'
 
 const mapStateToProps = (state) => {
   return {
-      currentUser: state.currentUser
+    currentUser: state.currentUser
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signIn: (username) => { dispatch(signInUser(username)) },
-    signOut: (username) => { dispatch(signOutUser(username)) }
+    signOut: () => { dispatch(signOut()) }
   }
 }
 

@@ -1,0 +1,40 @@
+function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()) { return next() }
+    res.json({error: "Not signed in"})
+}
+
+module.exports = function(app, passport) {
+    app.post('/signin', (req, res, next) => {
+        console.log('at /signin')
+        
+        passport.authenticate('local-login', (err, user, info) => {
+            console.log(user)
+            if (err) { return next(err); }
+            if (!user) { return res.json(info); }
+            if (user) {
+                req.logIn(user, function(err) {
+                    if (err) { return next(err); }
+                    console.log('sending user data!')
+                    return res.json(user); 
+                });
+            }            
+        })(req, res, next)
+    })
+        
+    app.post('/signout', isLoggedIn, function(req, res) {
+        // This may instead be handled 
+        req.logout()
+        req.session.destroy()
+        return res.json('logged out')
+    })
+
+    app.post('/checkSession', (req, res) => {
+        console.log("at /checkSession")
+        if (isLoggedIn) {
+            // TODO while we know the user is authenticated for the current session
+            // can't find where the user data is stored!
+            const user = req.user 
+            return res.json({ user }) 
+        }
+    })
+}

@@ -17,4 +17,4 @@ router.get('/:id', function (req, res, next) {
     getUser(req.params.id, callback);
 });
 
-export default router;
+export default router

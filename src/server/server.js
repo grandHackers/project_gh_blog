@@ -1,12 +1,18 @@
 import express from 'express'
+import mongoose from 'mongoose'
+import passport from 'passport'
+
+import session from 'express-session'
 import expressLess from 'express-less'
 import bodyParser from 'body-parser'
+import flash from 'connect-flash'
+
 import path from 'path'
 import util from 'util'
-import mongoose from 'mongoose'
 
 import config from '../../config/server-config.js'
 import { users, posts } from './routes'
+
 var logger = require('winston')
 
 
@@ -29,13 +35,27 @@ var app = express()
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+// required for passport
+app.use(session({ secret: 'simpleblogey', resave: true }))
+app.use(passport.initialize())
+app.use(passport.session()) // persistent login sessions
+app.use(flash()) // use connect-flash for flash messages stored in session
+
+// TODO implement
+require('../../config/passport')(passport) // configure passport
+require('./routes/auth')(app, passport) // mount routes for signin/login auth
+
 // Resources
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
-// Mount routers (API)
-app.use('/api/users', users);
-app.use('/api/posts', posts);
+// Mount API routers
+// TODO remove users routes! They shouldn't be exposed.
+// also make sure to instantiate all models before mounting them. (Right now logic is all mingled up)
+app.use('/api/users', users) 
+app.use('/api/posts', posts)
+
+
 
 // Serve HTML
 app.get('*', (req, res, next) => {

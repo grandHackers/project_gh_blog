@@ -2,8 +2,9 @@ import { combineReducers } from 'redux'
 import { 
     RECEIVE_POSTS, 
     RECEIVE_CREATED_POST,
-    SIGN_IN_USER,
-    SIGN_OUT_USER 
+    RECEIVE_SESSION_STATUS,
+    SIGN_IN_SUCCESS,
+    SIGN_OUT_SUCCESS
 } from '../actions';
 
 export const posts = (state = [], action) => {
@@ -24,9 +25,11 @@ export const posts = (state = [], action) => {
 // TODO add unit test!
 export const currentUser = ( state = '', action ) => {
     switch (action.type) {
-        case SIGN_IN_USER:
+        case RECEIVE_SESSION_STATUS:
             return action.username
-        case SIGN_OUT_USER:
+        case SIGN_IN_SUCCESS:
+            return action.username
+        case SIGN_OUT_SUCCESS:
             return ''
         default:
             return state

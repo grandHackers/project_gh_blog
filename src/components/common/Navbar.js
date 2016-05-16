@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import AppBar from 'material-ui/lib/app-bar'
 import FlatButton from 'material-ui/lib/flat-button'
@@ -51,10 +51,17 @@ export default class NavBar extends React.Component {
         var handler;
         if (!this.props.currentUser) {
             label = "Sign in"
-            handler = () => { this.props.signIn('erikay') }
+            handler = () => {  
+                console.log('Clicked on sign in!')
+                const path = config.SUBDIR_URL + '/signInForm'
+                this.context.router.push(path)                
+            }
         } else {
             label = 'Sign out' 
-            handler = () => { this.props.signOut(this.props.currentUser) }
+            handler = () => { 
+                console.log('Clicked on sign out!')
+                this.props.signOut()
+            }
         }
         
         return (
@@ -77,6 +84,10 @@ export default class NavBar extends React.Component {
         );
 
     }
+}
+
+NavBar.PropTypes = {
+    signOut: PropTypes.func.isRequired
 }
 
 NavBar.contextTypes = {
