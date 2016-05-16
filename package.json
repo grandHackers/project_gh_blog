@@ -43,6 +43,7 @@
     "mongoose": "^4.4.9",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
     "react": "^0.14.2",
     "react-addons-test-utils": "^15.0.2",
     "react-bootstrap": "^0.28.2",
