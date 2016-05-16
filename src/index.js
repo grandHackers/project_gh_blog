@@ -9,6 +9,7 @@ import { checkSessionStatus } from './actions'
 import App from './containers/Main'
 import AddPostForm from './containers/AddPostForm'
 import SignInForm from './containers/SignInForm'
+import SignUpForm from './containers/SignUpForm'
 import config from '../config/client-config'
 
 var initialStore = {
@@ -27,6 +28,7 @@ render(
       <Route path={config.SUBDIR_URL + "/"} component={App}/>
       <Route path={config.SUBDIR_URL + "/addPost"} component={AddPostForm}/>
       <Route path={config.SUBDIR_URL + "/signInForm"} component={SignInForm} />
+      <Route path={config.SUBDIR_URL + "/signUpForm"} component={SignUpForm} />
     </Router>
   </Provider>,
   document.getElementById('root')

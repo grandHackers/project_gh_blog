@@ -16,15 +16,17 @@ export function getUserByUsername(username, callback) {
 }
 
 
-export function createUser(username, firstname, lastname, email, callback) {
+export function createUser(username, password, email, firstname, lastname, callback) {
     // TODO comment me!
     // TODO May need to add in field for password 
     // if local authentication is to be supported.
     var data = {
-        username: username, 
+        username,
+        password,
+        email,
         first_name: firstname,
         last_name: lastname,
-        email
+
     };
     var user = new User(data)
     user.save(function(err) {

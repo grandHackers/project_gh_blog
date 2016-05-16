@@ -4,6 +4,7 @@ import {
     RECEIVE_CREATED_POST,
     RECEIVE_SESSION_STATUS,
     SIGN_IN_SUCCESS,
+    SIGN_UP_SUCCESS,
     SIGN_OUT_SUCCESS
 } from '../actions';
 
@@ -28,6 +29,8 @@ export const currentUser = ( state = '', action ) => {
         case RECEIVE_SESSION_STATUS:
             return action.username
         case SIGN_IN_SUCCESS:
+            return action.username
+        case SIGN_UP_SUCCESS:
             return action.username
         case SIGN_OUT_SUCCESS:
             return ''

@@ -45,31 +45,41 @@ export default class NavBar extends React.Component {
     }
     
     showSignInButton() {
-        // TODO take out hardcoding of the username
-        // after proper sign in is implemented
-        var label;
-        var handler;
+        // TODO merge signin + signup 
+        const generateButton = (label, handler) => {
+            return (
+                <FlatButton 
+                    label={label}
+                    onClick={handler} 
+                    style={this.styles.button}/>             
+            )              
+        }
+        
         if (!this.props.currentUser) {
-            label = "Sign in"
-            handler = () => {  
+            const loadSignInForm = () => {  
                 console.log('Clicked on sign in!')
                 const path = config.SUBDIR_URL + '/signInForm'
                 this.context.router.push(path)                
+            }            
+            const loadSignUpForm = () => {
+                console.log('Clicked on sign up!')
+                const path = config.SUBDIR_URL + '/signUpForm'
+                this.context.router.push(path)                       
             }
+            return [
+                generateButton("Sign in", loadSignInForm), 
+                generateButton("Sign up", loadSignUpForm)
+            ]    
+           
         } else {
-            label = 'Sign out' 
-            handler = () => { 
+            const label = 'Sign out' 
+            const handleSignOut = () => { 
                 console.log('Clicked on sign out!')
                 this.props.signOut()
             }
+            return generateButton(label, handleSignOut)
         }
         
-        return (
-            <FlatButton 
-                label={label}
-                onClick={handler} 
-                style={this.styles.button}/>             
-        )          
     }
     
     render() { 

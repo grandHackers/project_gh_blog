@@ -1,25 +1,45 @@
+import { createUser } from '../api/user'
+
 function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) { return next() }
     res.json({error: "Not signed in"})
 }
 
+// TODO refactor 
+function authenticateSignin(passport, req, res, next) {
+    passport.authenticate('local-login', (err, user, info) => {
+        console.log(user)
+        if (err) { return next(err); }
+        if (!user) { return res.json(info); }
+        if (user) {
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                console.log('sending user data!')
+                return res.json(user)
+            });
+        }          
+    })(req, res, next)    
+}
+
 module.exports = function(app, passport) {
     app.post('/signin', (req, res, next) => {
         console.log('at /signin')
-        
-        passport.authenticate('local-login', (err, user, info) => {
-            console.log(user)
-            if (err) { return next(err); }
-            if (!user) { return res.json(info); }
-            if (user) {
-                req.logIn(user, function(err) {
-                    if (err) { return next(err); }
-                    console.log('sending user data!')
-                    return res.json(user); 
-                });
-            }            
-        })(req, res, next)
+        authenticateSignin(passport, req, res, next)
     })
+
+    app.post('/signup', (req, res, next) => {
+        console.log('at /signup')
+        const { username, password, email, firstname, lastname } = req.body
+        
+        createUser(username, password, email, firstname, lastname, (err, user) => {
+            // assuming all validation is done at schema level 
+            // TODO need to handle error messages
+            console.log('at createUser callback')
+            if (err) { return next(err) }
+            authenticateSignin(passport, req, res, next)
+        })
+    })
+                
         
     app.post('/signout', isLoggedIn, function(req, res) {
         // This may instead be handled 
