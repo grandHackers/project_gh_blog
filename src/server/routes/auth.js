@@ -14,7 +14,7 @@ function authenticateSignin(passport, req, res, next) {
         if (user) {
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
-                console.log('current user ' + req.user)
+                console.log('Printing req.user: ' + req.user)
                 console.log('sending user data!')
                 return res.json(user)
             });

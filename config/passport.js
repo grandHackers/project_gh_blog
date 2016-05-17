@@ -10,12 +10,12 @@ module.exports = function(passport) {
         console.log('userid: ' + user.id)
         done(null, user.id);
     });
-    // used to deserialize the user
+    
     passport.deserializeUser(function(id, done) {
         console.log('at deserialize with id: ' + id)
         getUserById(id, function(err, user) {
-            done(err, user);
             console.log('user: ' + user)
+            done(err, user);
         });
     });    
     // =========================================================================
@@ -28,7 +28,6 @@ module.exports = function(passport) {
             passReqToCallback: true // allows us to pass back the entire request to the callback
          },
             function(req, username, password, done) {
-                console.log('at passport use!')
                 getUserByUsername(username, (err, user) => {
                     if (err) { return done(err) }
                     if (!user) { return done(null, false) }
@@ -37,38 +36,9 @@ module.exports = function(passport) {
                     }
                     return done(null, user)
                 })
-            }, function(e) { 
-                console.log('error!')
-                return done(null, false, {message: 'Incorrect credentials!'})
             }
         )
     )
     
-    passport.use(
-        'local-signup', new LocalStrategy({
-            usernameField: 'username',
-            passwordField: 'password',
-            passReqToCallback: true // allows us to pass back the entire request to the callback
-         },
-            function(req, username, password, done) {
-                console.log('passport local sign-up')
-                const firstname = req.body.firstname
-                const lastname = req.body.lastname
-                const email = req.body.email
-                //console.log(username)
-                //console.log(password)                
-                //console.log(firstname)
-                //console.log(lastname)
-                //console.log(email)
-                createUser(username, password, email, firstname, lastname, (err, user) => {
-                    // assuming all validation is done at schema level 
-                    // TODO need to handle error messages
-                    console.log('at createUser')
-                    if (err) { return done(err) }
-                    return done(null, user)
-                })
-            }
-        )
-    )
     
 }

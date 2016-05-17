@@ -22,6 +22,27 @@ export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 import config from '../../config/client-config.js'
 //const apiUrl = config.API_URL
 
+
+function generatePostRequestConfig(data) {
+    var requestConfig = {
+        method: 'POST',
+        credentials: 'same-origin'
+    }
+    if (!!data) {
+        requestConfig.body = JSON.stringify(data)
+        requestConfig.headers = { 'Content-Type': 'application/json' }
+    } 
+    return requestConfig
+}
+
+
+function generateGetRequestConfig() {
+    return {
+        method: 'GET',
+        credentials: 'same-origin'
+    }
+}
+
 export function requestSessionStatus() {
     return { type: REQUEST_SESSION_STATUS }
 }
@@ -38,10 +59,8 @@ export function checkSessionStatus() {
     return (dispatch) => {
         dispatch(requestSessionStatus())
         var url = config.SUBDIR_URL + "/checkSession"
-        return fetch(url, {
-            method: 'POST',
-            data: {}
-        }).then(response => response.json())
+        const requestConfig = generatePostRequestConfig()
+        return fetch(url, requestConfig).then(response => response.json())
           .then(result => dispatch(receiveSessionStatus(result)) )
     }
 }
@@ -60,15 +79,10 @@ export function signUpSuccess(user) {
 export function signUp(username, password, email, firstname, lastname) {
     const url = config.SUBDIR_URL + '/signup'
     const data = {username, password, email, firstname, lastname}
+    const requestConfig = generatePostRequestConfig(data)
     return (dispatch) => {
         dispatch(requestSignUp())
-        return fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },            
-            body: JSON.stringify(data)
-        }).then(response => response.json())
+        return fetch(url, requestConfig).then(response => response.json())
           .then(data => dispatch(signUpSuccess(data)))
     }
 }
@@ -91,14 +105,10 @@ export function signInSuccess(user) {
 export function signIn(username, password) {
     return (dispatch) => {
         dispatch(requestSignIn(username))
-        const data = {username, password}
-        return fetch(config.SUBDIR_URL + "/signin", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(response => response.json())
+        const data = {username, password} 
+        const requestConfig = generatePostRequestConfig(data)
+        return fetch(config.SUBDIR_URL + "/signin", requestConfig)
+          .then(response => response.json())
           .then(data => dispatch(signInSuccess(data)))
     }
 }
@@ -108,9 +118,10 @@ export function requestSignOut() {
 }
 
 export function signOut() {
+    const requestConfig = generatePostRequestConfig()
     return (dispatch) => {
         dispatch(requestSignOut())
-        return fetch(config.SUBDIR_URL + "/signout", { method: 'POST'})
+        return fetch(config.SUBDIR_URL + "/signout", requestConfig) 
           .then(dispatch(signOutSuccess()))
     }    
 }
@@ -139,9 +150,10 @@ export function receivePosts(owner, data) {
 
 export function fetchPosts(owner) {
     /* Fetches posts belonging to some owner */
+    const requestConfig = generateGetRequestConfig()
     return function (dispatch) {
         dispatch(requestGetPosts(owner))
-        return fetch(config.API_URL + "/posts/" + owner)
+        return fetch(config.API_URL + "/posts/" + owner, requestConfig)
             .then(response => response.json())
             .then(data => 
                   dispatch(receivePosts(owner, data)))
@@ -175,15 +187,11 @@ export function createPost(title, content) {
             owner: state.currentUser,
             title,
             content
-        }        
+        }
+        const requestConfig = generatePostRequestConfig(payload)
         dispatch(requestCreatePost(payload))
-        return fetch(config.API_URL + '/posts/' + state.currentUser, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }).then(response => response.json())
+        return fetch(config.API_URL + '/posts/' + state.currentUser, requestConfig)
+          .then(response => response.json())
           .then(data => 
                 dispatch(receiveCreatedPost(data)))
           .catch(error => console.log(error)) 
