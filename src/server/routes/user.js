@@ -1,11 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
-import { getUser } from '../api/user';
+import { getUserById } from '../api/user';
 
 var router = express.Router();
 
-/*    /users/:id    */
+/*    /users/:id    -- probably shouldn't be available...*/
 router.get('/:id', function (req, res, next) {
     var callback = function (err, doc) {
         if (err) {
@@ -14,7 +14,7 @@ router.get('/:id', function (req, res, next) {
         }
         res.json(doc);
     }
-    getUser(req.params.id, callback);
+    getUserById(req.params.id, callback);
 });
 
 export default router

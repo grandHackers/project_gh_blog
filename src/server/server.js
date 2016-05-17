@@ -4,6 +4,7 @@ import passport from 'passport'
 
 import session from 'express-session'
 import expressLess from 'express-less'
+import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import flash from 'connect-flash'
 
@@ -32,6 +33,12 @@ connectToDB(config.DB_HOST, config.DB_PORT, config.DB_NAME)
 
 
 var app = express()
+
+// Resources
+app.use("/", express.static( __dirname + "/../../public/"));
+app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
+
+app.use(cookieParser())
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
 
@@ -45,16 +52,11 @@ app.use(flash()) // use connect-flash for flash messages stored in session
 require('../../config/passport')(passport) // configure passport
 require('./routes/auth')(app, passport) // mount routes for signin/login auth
 
-// Resources
-app.use("/", express.static( __dirname + "/../../public/"));
-app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
-
 // Mount API routers
 // TODO remove users routes! They shouldn't be exposed.
 // also make sure to instantiate all models before mounting them. (Right now logic is all mingled up)
 app.use('/api/users', users) 
 app.use('/api/posts', posts)
-
 
 
 // Serve HTML

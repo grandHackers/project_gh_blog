@@ -1,19 +1,21 @@
 var LocalStrategy   = require('passport-local').Strategy;
-import { getUserByUsername, createUser } from '../src/server/api/user'
+import { getUserById, getUserByUsername, createUser } from '../src/server/api/user'
 
 // TODO Consider getting rid of username and instead verify via email
 
 module.exports = function(passport) {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        console.log('at serialize')
+        console.log('at serialize with user: ' + user)
+        console.log('userid: ' + user.id)
         done(null, user.id);
     });
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        console.log('at deserialize')
-        User.findById(id, function(err, user) {
+        console.log('at deserialize with id: ' + id)
+        getUserById(id, function(err, user) {
             done(err, user);
+            console.log('user: ' + user)
         });
     });    
     // =========================================================================
