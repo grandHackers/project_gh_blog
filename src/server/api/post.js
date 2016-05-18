@@ -9,25 +9,21 @@ export function getPostById(postId, callback) {
     return Post.findById(postId, callback);
 }
 
-export function getPostsByOwner(owner, callback) {
+export function getPostsByOwner(ownerId, callback) {
     return Post.
-        find({ owner }).
+        find({ owner_id: ownerId }).
         sort('-created_at').
         exec(callback)
 }
 
-export function createPost(owner, title, content, callback) {
+export function createPost(ownerId, title, content, callback) {
     /* Creates a new post document. 
      * @param {string} owner        username of the user who is making the post      
      * @param {string} title        title of the post
      * @param {string} content      content of the post 
      * @param {function} callback   callback function accepting an error and a post document 
      */    
-    var data = {
-        owner: owner,
-        title: title, 
-        content: content
-    };
+    var data = { owner_id: ownerId, title, content }
     var post = new Post(data);
     post.save(function(err) {
         callback(err, post);

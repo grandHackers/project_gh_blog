@@ -28,12 +28,12 @@ router.get('/:owner', function(req, res, next) {
 });
 
 /*  POST - /posts/owner  */
-router.post('/:owner', function(req, res, next) {
+router.post('/:ownerId', function(req, res, next) {
     const payload = JSON.stringify(req.body)    
     logger.log('info', 'Creating a post ' + payload)
     
-    const { owner, title, content } = req.body;
-    createPost(owner, title, content, function(err, post) {
+    const { ownerId, title, content } = req.body;
+    createPost(ownerId, title, content, function(err, post) {
         if (err) {
             logger.log('error', "Error in creating a post " + payload + ' : ' + err)
             return next(err);

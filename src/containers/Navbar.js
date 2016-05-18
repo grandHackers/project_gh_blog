@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { signOut } from '../actions'
+import Actions from '../actions'
 import Navbar from '../components/common/Navbar'
 
 // Currently assuming that current feed only consists of posts
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signOut: () => { dispatch(signOut()) }
+    signOut: () => { dispatch(Actions.signOut()) }
   }
 }
 

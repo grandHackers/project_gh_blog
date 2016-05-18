@@ -1,18 +1,12 @@
 import { combineReducers } from 'redux'
-import { 
-    RECEIVE_POSTS, 
-    RECEIVE_CREATED_POST,
-    RECEIVE_SESSION_STATUS,
-    SIGN_IN_SUCCESS,
-    SIGN_UP_SUCCESS,
-    SIGN_OUT_SUCCESS
-} from '../actions';
+import Actions from '../actions'
+
 
 export const posts = (state = [], action) => {
   switch (action.type) {
-    case RECEIVE_POSTS:
+    case Actions.RECEIVE_POSTS:
         return action.posts
-    case RECEIVE_CREATED_POST:
+    case Actions.RECEIVE_CREATED_POST:
         return [
             action.post,
             ...state,
@@ -23,17 +17,21 @@ export const posts = (state = [], action) => {
   }
 }
 
-// TODO add unit test!
-export const currentUser = ( state = '', action ) => {
+export const currentUser = ( state = {}, action ) => {
+    var userInfo = action.user
+    if (!!userInfo) { // user info is present in form of an object
+        userInfo.name = userInfo.first_name + " " + userInfo.last_name
+    }
+    // user info is expected to have id, name, and email
     switch (action.type) {
-        case RECEIVE_SESSION_STATUS:
-            return action.username
-        case SIGN_IN_SUCCESS:
-            return action.username
-        case SIGN_UP_SUCCESS:
-            return action.username
-        case SIGN_OUT_SUCCESS:
-            return ''
+        case Actions.RECEIVE_SESSION_STATUS:
+            return userInfo
+        case Actions.SIGN_IN_SUCCESS:
+            return userInfo
+        case Actions.SIGN_UP_SUCCESS:
+            return userInfo
+        case Actions.SIGN_OUT_SUCCESS:
+            return {}
         default:
             return state
     }

@@ -11,7 +11,7 @@ export default class Main extends React.Component {
     
     render() { 
         var feed;
-        if (!!this.props.currentUser) {
+        if (!!this.props.currentUser.id) {
             feed = <Feed />
         }
         return (

@@ -1,0 +1,105 @@
+import fetch from 'isomorphic-fetch'
+import config from '../../config/client-config.js'
+import { generateGetRequestConfig, generatePostRequestConfig } from './util.js'
+
+export const REQUEST_SESSION_STATUS = 'REQUEST_SESSION_STATUS'
+export const RECEIVE_SESSION_STATUS = 'RECEIVE_SESSION_STATUS'
+
+export const REQUEST_SIGN_IN = 'REQUEST_SIGN_IN'
+export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
+
+export const REQUEST_SIGN_UP = 'REQUEST_SIGN_UP'
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
+
+export const REQUEST_SIGN_OUT = 'REQUEST_SIGN_OUT'
+export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
+
+
+function requestSessionStatus() {
+    return { type: REQUEST_SESSION_STATUS }
+}
+
+function receiveSessionStatus(status) {
+    var user = status.user || {}
+    return {
+        type: RECEIVE_SESSION_STATUS,
+        user
+    }
+}
+
+export function checkSessionStatus() {
+    return (dispatch) => {
+        dispatch(requestSessionStatus())
+        var url = config.SUBDIR_URL + "/checkSession"
+        const requestConfig = generatePostRequestConfig()
+        return fetch(url, requestConfig).then(response => response.json())
+          .then(result => dispatch(receiveSessionStatus(result)) )
+    }
+}
+
+function requestSignUp() {
+    return { type: REQUEST_SIGN_UP }
+}
+
+function signUpSuccess(user) {
+    return { 
+        type: SIGN_UP_SUCCESS,
+        user
+    }
+}
+
+export function signUp(email, password, firstname, lastname) {
+    // for local signup
+    const url = config.SUBDIR_URL + '/signup'
+    const data = {email, password, firstname, lastname}
+    const requestConfig = generatePostRequestConfig(data)
+    return (dispatch) => {
+        dispatch(requestSignUp())
+        return fetch(url, requestConfig).then(response => response.json())
+          .then(data => dispatch(signUpSuccess(data)))
+    }
+}
+
+
+function requestSignIn(email) {
+    return {
+        type: REQUEST_SIGN_IN,
+        email
+    }    
+}
+
+function signInSuccess(user) {
+    return {
+        type: SIGN_IN_SUCCESS,
+        user
+    }   
+}
+
+export function signIn(email, password) {
+    // for local signin
+    return (dispatch) => {
+        dispatch(requestSignIn(email))
+        const data = {email, password} 
+        const requestConfig = generatePostRequestConfig(data)
+        return fetch(config.SUBDIR_URL + "/signin", requestConfig)
+          .then(response => response.json())
+          .then(data => dispatch(signInSuccess(data)))
+    }
+}
+
+function requestSignOut() {
+    return { type: REQUEST_SIGN_OUT }
+}
+
+export function signOut() {
+    const requestConfig = generatePostRequestConfig()
+    return (dispatch) => {
+        dispatch(requestSignOut())
+        return fetch(config.SUBDIR_URL + "/signout", requestConfig) 
+          .then(dispatch(signOutSuccess()))
+    }    
+}
+
+function signOutSuccess() {
+    return { type: SIGN_OUT_SUCCESS }
+}

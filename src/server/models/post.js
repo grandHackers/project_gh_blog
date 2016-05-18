@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
-    owner: { // username of the author
+    owner_id: { 
         type: String,
         required: true
     },
@@ -20,11 +20,11 @@ var postSchema = new Schema({
 }, {timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 // Checking username is correct
-postSchema.path('owner').validate( function (username, respond) {
-    mongoose.model('User').findOne({ username: username }, function (err, user) {
+postSchema.path('owner_id').validate( function (ownerId, respond) {
+    mongoose.model('User').findById(ownerId, function (err, user) {
         respond(!!user);
     });
-}, "The username doesn't exist!");
+}, "No such owner exists!");
 
 
 module.exports = mongoose.model('Post', postSchema)

@@ -26,7 +26,7 @@ export default class signUpForm extends Component {
     }
     
     transferToMainIfSignedIn() {
-        if (this.props.currentUser) {
+        if (!!this.props.currentUser.id) {
             const path = config.SUBDIR_URL + '/'
             this.context.router.push(path)
         }
@@ -42,19 +42,18 @@ export default class signUpForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault()       
-        const username = this.refs.username.getValue()
-        const password = this.refs.password.getValue() 
         const email = this.refs.email.getValue()
+        const password = this.refs.password.getValue() 
         const firstname = this.refs.firstname.getValue()
         const lastname = this.refs.lastname.getValue()
         // TODO provide better validation
         // may instead use a form library 
-        if (username && password && email && firstname && lastname) {
+        if (email && password && firstname && lastname) {
             console.log("Clicking signup")
-            this.props.signUp(username, password, email, firstname, lastname)
+            this.props.signUp(email, password, firstname, lastname)
         }
         else {
-            alert('Must provide both username and password.')
+            alert('Must provide both email and password.')
         }
         
     }
@@ -64,8 +63,8 @@ export default class signUpForm extends Component {
             <div id='add-post-form'>
                 <form action="" onSubmit={this.handleSubmit}>
                     <TextField 
-                        hintText="Username"
-                        ref='username'
+                        hintText="email"
+                        ref='email'
                         style={this.style.input}/>
                     <br />
                     <TextField 
@@ -73,11 +72,6 @@ export default class signUpForm extends Component {
                         ref='password'
                         style={this.style.input}/>
                     <br />               
-                    <TextField 
-                        hintText="email"
-                        ref='email'
-                        style={this.style.input}/>
-                    <br />
                     <TextField 
                         hintText="first name"
                         ref='firstname'

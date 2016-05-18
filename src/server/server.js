@@ -31,7 +31,6 @@ function connectToDB(host, port, dbName) {
 
 connectToDB(config.DB_HOST, config.DB_PORT, config.DB_NAME)
 
-
 var app = express()
 app.use(cookieParser())
 app.use(bodyParser.json()); // support json encoded bodies

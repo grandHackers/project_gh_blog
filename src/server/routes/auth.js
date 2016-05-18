@@ -30,9 +30,9 @@ module.exports = function(app, passport) {
 
     app.post('/signup', (req, res, next) => {
         console.log('at /signup')
-        const { username, password, email, firstname, lastname } = req.body
+        const { email, password, firstname, lastname } = req.body
         
-        createUser(username, password, email, firstname, lastname, (err, user) => {
+        createUser(email, password, firstname, lastname, (err, user) => {
             // assuming all validation is done at schema level 
             // TODO need to handle error messages
             console.log('at createUser callback')
@@ -58,4 +58,18 @@ module.exports = function(app, passport) {
             return res.json({ user }) 
         }
     })
+    
+
+    app.get('/auth/google',
+    passport.authenticate('google', { scope: 
+        [ 'https://www.googleapis.com/auth/plus.login',
+          'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+    ))
+    
+    app.get( '/auth/google/callback', 
+        passport.authenticate( 'google', { 
+            successRedirect: '/',
+            failureRedirect: '/login_fail' // TODO implement
+    }))
+    
 }

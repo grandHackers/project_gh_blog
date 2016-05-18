@@ -1,19 +1,23 @@
 import mongoose from 'mongoose';
+var findOrCreate = require('mongoose-findorcreate')
 
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    username: {
+    email: {
         type: String,
-        minlength: 4,
-        maxlength: 12,
-        required: [true, 'Username required!']
-    },
+        maxlength: 255,
+        validate: {
+            validator: validateEmail,
+            message: '{VALUE} is not a valid email address!'
+        },
+        required: [true, 'User email address required']
+    },    
     password: { // TODO need to encrypt the password
+        // password only required if google_id field is empty
         type: String, 
         minlength: 4,
-        maxlength: 128,
-        required: [true, 'User password required!']   
+        maxlength: 128, 
     },
     first_name: {
         type: String,
@@ -25,14 +29,8 @@ var userSchema = new Schema({
         maxlength: 35,
         required: [true, 'User last name required!']
     },
-    email: {
-        type: String,
-        maxlength: 255,
-        validate: {
-            validator: validateEmail,
-            message: '{VALUE} is not a valid email address!'
-        },
-        required: [true, 'User email address required']
+    google_id: {
+        type: String
     }
 });
 
@@ -50,8 +48,8 @@ userSchema.methods.verifyPassword = function(password) {
 }
 
 // TODO add validation for unique username
-
-var User = mongoose.model('User', userSchema);
+userSchema.plugin(findOrCreate)
+var User = mongoose.model('User', userSchema)
 export default User;
 module.exports = User;
   

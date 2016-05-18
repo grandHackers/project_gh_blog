@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { signIn } from '../actions'
+import Actions from '../actions'
 import SignInForm from '../components/SignInForm'
 
 
@@ -11,8 +11,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signIn: (username, password) => {
-        dispatch(signIn(username, password))
+    signIn: (email, password) => {
+        dispatch(Actions.signIn(email, password))
     }
   }
 }

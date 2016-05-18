@@ -34,7 +34,7 @@ export default class NavBar extends React.Component {
         // TODO need to get the current route name
         // and render the add post page button if current route is at the index
         var button;
-        if (!!this.props.currentUser) {
+        if (!!this.props.currentUser.id) {
             button = (
                 <FlatButton
                     label="Write a story"
@@ -55,7 +55,7 @@ export default class NavBar extends React.Component {
             )              
         }
         
-        if (!this.props.currentUser) {
+        if (!this.props.currentUser.id) {
             const loadSignInForm = () => {  
                 console.log('Clicked on sign in!')
                 const path = config.SUBDIR_URL + '/signInForm'

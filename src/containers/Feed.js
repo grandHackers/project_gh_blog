@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchPosts } from '../actions'
+import Actions from '../actions'
 import Feed from '../components/mainPage/Feed'
 
 // Currently assuming that current feed only consists of posts
@@ -18,8 +18,8 @@ const mapDispatchToProps = (dispatch) => {
     // of the current user, but for now just relying
     // on the container to have the currentUser information
     // until I look into 'mergeProps'.
-    fetchPosts: (currentUser) => {
-        dispatch(fetchPosts(currentUser))        
+    fetchPosts: (ownerId) => {
+        dispatch(Actions.fetchPosts(ownerId))        
     }
   }
 }

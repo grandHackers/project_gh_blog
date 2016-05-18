@@ -17,7 +17,7 @@ export default class SignInForm extends Component {
             },
             button: {
               display: 'block',
-              width: '10%',
+              width: '15%',
               margin: 'auto',
             }
         }
@@ -26,7 +26,7 @@ export default class SignInForm extends Component {
     }
     
     transferToMainIfSignedIn() {
-        if (this.props.currentUser) {
+        if (!!this.props.currentUser.id) {
             const path = config.SUBDIR_URL + '/'
             this.context.router.push(path)
         }
@@ -42,26 +42,28 @@ export default class SignInForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault()       
-        const username = this.refs.username.getValue()
+        const email = this.refs.email.getValue()
         const password = this.refs.password.getValue() 
         
-        if (username && password) {
+        if (email && password) {
             console.log("Clicking signin")             
-            this.props.signIn(username, password)
+            this.props.signIn(email, password)
         }
         else {
-            alert('Must provide both username and password.')
+            alert('Must provide both email and password.')
         }
         
     }
         
     render() {
         return (
-            <div id='add-post-form'>
+        <div id='sign-in'>            
+            <div id='add-post-form'> 
+            {/* change id=add-post-form to some class=sign-in-form and apply styling */}
                 <form action="" onSubmit={this.handleSubmit}>
                     <TextField 
-                        hintText="Username"
-                        ref='username'
+                        hintText="email"
+                        ref='email'
                         style={this.style.input}/>
                     <br />
                     <TextField 
@@ -78,6 +80,14 @@ export default class SignInForm extends Component {
                     />
                 </form>
             </div>
+            <RaisedButton 
+                label="Sign in with Google"
+                primary={true}
+                style={this.style.button}
+                linkButton={true}
+                href={config.SUBDIR_URL + '/auth/google'}
+            />
+        </div>
         );
     }    
 }

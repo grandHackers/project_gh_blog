@@ -9,21 +9,24 @@ export function getUserById(userId, callback) {
     return User.findById(userId, callback);
 }
 
-export function getUserByUsername(username, callback) {
+export function getUserByEmail(email, callback) {
     // TODO comment me!
-    // make sure to not give out password
-    return User.findOne({username}, callback)
+    // make sure to not give out password    
+    return User.findOne({email}, callback)
 }
 
+export function getUserByGoogleId(googleId, callback) {
+    // TODO comment me!
+    return User.findOne({google_id: googleId}, callback)
+}
 
-export function createUser(username, password, email, firstname, lastname, callback) {
+export function createUser(email, password, firstname, lastname, callback) {
     // TODO comment me!
     // TODO May need to add in field for password 
     // if local authentication is to be supported.
     var data = {
-        username,
-        password,
         email,
+        password,
         first_name: firstname,
         last_name: lastname,
 
