@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import TextField from 'material-ui/lib/TextField'
 import RaisedButton from 'material-ui/lib/raised-button'
-import config from '../../config/client-config'
+import config from '../../../config/client-config'
 
-export default class SignInForm extends Component {
+export default class signUpForm extends Component {
     constructor(props, context) {
         super(props)
         context.router
@@ -17,7 +17,7 @@ export default class SignInForm extends Component {
             },
             button: {
               display: 'block',
-              width: '15%',
+              width: '10%',
               margin: 'auto',
             }
         }
@@ -44,10 +44,13 @@ export default class SignInForm extends Component {
         event.preventDefault()       
         const email = this.refs.email.getValue()
         const password = this.refs.password.getValue() 
-        
-        if (email && password) {
-            console.log("Clicking signin")             
-            this.props.signIn(email, password)
+        const firstname = this.refs.firstname.getValue()
+        const lastname = this.refs.lastname.getValue()
+        // TODO provide better validation
+        // may instead use a form library 
+        if (email && password && firstname && lastname) {
+            console.log("Clicking signup")
+            this.props.signUp(email, password, firstname, lastname)
         }
         else {
             alert('Must provide both email and password.')
@@ -57,9 +60,7 @@ export default class SignInForm extends Component {
         
     render() {
         return (
-        <div id='sign-in'>            
-            <div id='add-post-form'> 
-            {/* change id=add-post-form to some class=sign-in-form and apply styling */}
+            <div id='add-post-form'>
                 <form action="" onSubmit={this.handleSubmit}>
                     <TextField 
                         hintText="email"
@@ -71,8 +72,18 @@ export default class SignInForm extends Component {
                         ref='password'
                         style={this.style.input}/>
                     <br />               
+                    <TextField 
+                        hintText="first name"
+                        ref='firstname'
+                        style={this.style.input}/>
+                    <br />            
+                    <TextField 
+                        hintText="last name"
+                        ref='lastname'
+                        style={this.style.input}/>
+                    <br />                                            
                     <RaisedButton 
-                        label="SignIn" 
+                        label="signUp" 
                         primary={true} 
                         style={this.style.button} 
                         ref='submitButton'
@@ -80,23 +91,15 @@ export default class SignInForm extends Component {
                     />
                 </form>
             </div>
-            <RaisedButton 
-                label="Sign in with Google"
-                primary={true}
-                style={this.style.button}
-                linkButton={true}
-                href={config.SUBDIR_URL + '/auth/google'}
-            />
-        </div>
         );
     }    
 }
 
-SignInForm.PropTypes = {
+signUpForm.PropTypes = {
     // TODO add currentUser
-    signIn: PropTypes.func.isRequired, 
+    signUp: PropTypes.func.isRequired, 
 }
 
-SignInForm.contextTypes = {
+signUpForm.contextTypes = {
     router: React.PropTypes.object.isRequired
 }

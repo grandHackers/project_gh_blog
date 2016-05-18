@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import AppBar from 'material-ui/lib/app-bar'
 import FlatButton from 'material-ui/lib/flat-button'
 import config from '../../../config/client-config'
+import SignInModal from '../SignIn/SignInModal'
 
 export default class NavBar extends React.Component {
     constructor(props, context) {
@@ -56,6 +57,15 @@ export default class NavBar extends React.Component {
         }
         
         if (!this.props.currentUser.id) {
+            return <SignInModal />
+            /*
+            const loadSignInPage = () => {  
+                console.log('Clicked on sign in!')
+                const path = config.SUBDIR_URL + '/signInPage'
+                this.context.router.push(path)                
+            }
+            return generateButton("Sign in", loadSignInPage)            
+           
             const loadSignInForm = () => {  
                 console.log('Clicked on sign in!')
                 const path = config.SUBDIR_URL + '/signInForm'
@@ -69,7 +79,7 @@ export default class NavBar extends React.Component {
             return [
                 generateButton("Sign in", loadSignInForm), 
                 generateButton("Sign up", loadSignUpForm)
-            ]    
+            ]*/
            
         } else {
             const label = 'Sign out' 

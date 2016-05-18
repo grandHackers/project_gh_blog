@@ -8,6 +8,7 @@ import configureStore from './store/configureStore'
 import Actions from './actions'
 import App from './containers/Main'
 import AddPostForm from './containers/AddPostForm'
+import SignInPage from './components/SignIn/SignInPage'
 import SignInForm from './containers/SignInForm'
 import SignUpForm from './containers/SignUpForm'
 import config from '../config/client-config'
@@ -27,8 +28,12 @@ render(
     <Router history={browserHistory}>
       <Route path={config.SUBDIR_URL + "/"} component={App}/>
       <Route path={config.SUBDIR_URL + "/addPost"} component={AddPostForm}/>
+      {/*
+      <Route path={config.SUBDIR_URL + "/signInPage"} component={SignInPage} />
       <Route path={config.SUBDIR_URL + "/signInForm"} component={SignInForm} />
-      <Route path={config.SUBDIR_URL + "/signUpForm"} component={SignUpForm} />
+      <Route path={config.SUBDIR_URL + "/signUpForm"} component={SignUpForm} />         
+        */ }
+
     </Router>
   </Provider>,
   document.getElementById('root')
