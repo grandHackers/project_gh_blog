@@ -6,22 +6,18 @@ export default class Feed extends Component {
     
     constructor(props) {
         // props : fetchPosts, posts
-        super(props);
+        super(props)
     }
     
     componentDidMount() {
         // fetching only posts owned by currentUser at this point..
-        const ownerId = this.props.currentUser.id
-        if (!!ownerId) {
-            this.props.fetchPosts(ownerId);            
-        }
-
+        //const ownerId = this.props.currentUser.id
+        this.props.fetchPosts(this.props.owner)
     }
         
     render() {
-        const ownerName = this.props.currentUser.name
         const feedItems = this.props.posts.map( 
-            item => <FeedItem {...item} ownerName={ownerName} /> )
+            item => <FeedItem {...item} /> )
         return (
             <div id='feed-background'>
                 <div className='feed'> 

@@ -6,14 +6,22 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
     email: {
         type: String,
+        unique: true,
         maxlength: 255,
         validate: {
             validator: validateEmail,
-            message: '{VALUE} is not a valid email address!'
+            message: '{VALUE} is not a valid email address!',
         },
         required: [true, 'User email address required']
-    },    
-    password: { // TODO need to encrypt the password
+    },
+    username: {
+        type: String,
+        unique: true,        
+        minlength: 4,
+        required: [true, 'Username required!']
+    },
+    password: { 
+        // TODO need to encrypt the password
         // password only required if google_id field is empty
         type: String, 
         minlength: 4,
@@ -31,6 +39,7 @@ var userSchema = new Schema({
     },
     google_id: {
         type: String
+        // TODO implement validator to check that there's no duplicate google_id (except for null value)
     }
 });
 

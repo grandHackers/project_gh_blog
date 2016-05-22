@@ -1,0 +1,15 @@
+- add some error handling when user tries to log in with invalid + non-existing credentials
+
+- actually just about all error handling on client side as well
+
+- on client side, do not allow user to access AddPostPage without signing in first 
+    (look into react router - is there a common pattern used when using with react router?)
+
+- clicking submit button of sign in / sign up page closes the dialog right away. (which shouldn't)
+maybe because the state changes when user's sign in / sign up request is successful so the dialog is re-rendered with initial state? 
+   
+- architect the redux state
+    How to do I go about editing a post? 
+https://github.com/reactjs/redux/issues/1385,)
+- when logging in with email, if user signed up using his/her gmail account, 
+let user just sign in with the google account instead

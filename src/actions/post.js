@@ -28,15 +28,15 @@ function receivePosts(ownerId, data) {
   }
 }
 
-export function fetchPosts(ownerId) {
+export function fetchPosts(owner) {
     /* Fetches posts belonging to some owner */
     const requestConfig = generateGetRequestConfig()
     return function (dispatch) {
-        dispatch(requestGetPosts(ownerId))
-        return fetch(config.API_URL + "/posts/" + ownerId, requestConfig)
+        dispatch(requestGetPosts(owner))
+        return fetch(config.API_URL + "/posts?owner=" + owner, requestConfig)
             .then(response => response.json())
             .then(data => 
-                  dispatch(receivePosts(ownerId, data)))
+                  dispatch(receivePosts(owner, data)))
             .catch(error => console.log(error)) 
     }
 }
@@ -63,11 +63,12 @@ export function createPost(title, content) {
     // only on their own blog, so not doing any validation here.
     return function (dispatch, getState) {
         const state = getState()
-        const ownerId = state.currentUser.id
-        var payload = { ownerId, title, content }
+        //const ownerId = state.currentUser.id
+        //var payload = { ownerId, title, content }
+        var payload = { title, content }
         const requestConfig = generatePostRequestConfig(payload)
         dispatch(requestCreatePost(payload))
-        return fetch(config.API_URL + '/posts/' + ownerId, requestConfig)
+        return fetch(config.API_URL + '/posts/', requestConfig)
           .then(response => response.json())
           .then(data => 
                 dispatch(receiveCreatedPost(data)))

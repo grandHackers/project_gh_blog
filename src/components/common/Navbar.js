@@ -46,50 +46,25 @@ export default class NavBar extends React.Component {
     }
     
     showSignInButton() {
-        // TODO merge signin + signup 
-        const generateButton = (label, handler) => {
-            return (
-                <FlatButton 
-                    label={label}
-                    onClick={handler} 
-                    style={this.styles.button}/>             
-            )              
-        }
-        
-        if (!this.props.currentUser.id) {
+        if (!this.props.currentUser.username) {
             return <SignInModal />
-            /*
-            const loadSignInPage = () => {  
-                console.log('Clicked on sign in!')
-                const path = config.SUBDIR_URL + '/signInPage'
-                this.context.router.push(path)                
-            }
-            return generateButton("Sign in", loadSignInPage)            
-           
-            const loadSignInForm = () => {  
-                console.log('Clicked on sign in!')
-                const path = config.SUBDIR_URL + '/signInForm'
-                this.context.router.push(path)                
-            }            
-            const loadSignUpForm = () => {
-                console.log('Clicked on sign up!')
-                const path = config.SUBDIR_URL + '/signUpForm'
-                this.context.router.push(path)                       
-            }
-            return [
-                generateButton("Sign in", loadSignInForm), 
-                generateButton("Sign up", loadSignUpForm)
-            ]*/
            
         } else {
             const label = 'Sign out' 
             const handleSignOut = () => { 
                 console.log('Clicked on sign out!')
                 this.props.signOut()
+                
+                const path = config.SUBDIR_URL + '/' 
+                this.context.router.push(path)
             }
-            return generateButton(label, handleSignOut)
-        }
-        
+            return (
+                <FlatButton 
+                    label={label}
+                    onClick={handleSignOut} 
+                    style={this.styles.button}/>             
+            )              
+        }    
     }
     
     render() { 

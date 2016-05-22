@@ -11,8 +11,10 @@ export default class Main extends React.Component {
     
     render() { 
         var feed;
-        if (!!this.props.currentUser.id) {
-            feed = <Feed />
+        console.log("owner: " + this.props.params.owner)
+        const owner = this.props.params.owner
+        if (!!owner) {
+            feed = <Feed owner={owner}/>
         }
         return (
             <div>

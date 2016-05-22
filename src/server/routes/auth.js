@@ -1,11 +1,11 @@
 import { createUser } from '../api/user'
+import { getAvailableUsername } from '../util'
 
-function isLoggedIn (req, res, next) {
+export function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) { return next() }
     res.json({error: "Not signed in"})
 }
 
-// TODO refactor 
 function authenticateSignin(passport, req, res, next) {
     passport.authenticate('local-login', (err, user, info) => {
         console.log(user)
@@ -15,7 +15,9 @@ function authenticateSignin(passport, req, res, next) {
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 console.log('Printing req.user: ' + req.user)
-                console.log('sending user data!')
+                var userDataToSend = Object.assign({}, req.user)
+                delete userDataToSend['password']
+                console.log('sending user data!' + userDataToSend)
                 return res.json(user)
             });
         }          
@@ -31,14 +33,18 @@ module.exports = function(app, passport) {
     app.post('/signup', (req, res, next) => {
         console.log('at /signup')
         const { email, password, firstname, lastname } = req.body
-        
-        createUser(email, password, firstname, lastname, (err, user) => {
-            // assuming all validation is done at schema level 
-            // TODO need to handle error messages
-            console.log('at createUser callback')
-            if (err) { return next(err) }
-            authenticateSignin(passport, req, res, next)
-        })
+        const defaultUsername = email.split("@")[0]
+        getAvailableUsername(defaultUsername).
+            then(username => { 
+                console.log("username is: " + username)
+                return createUser(email, password, username, firstname, lastname) }).
+            then((err, user) => {
+                // err handling done in the following catch statement....?
+                console.log('at createUser callback')
+                console.log(user)
+                authenticateSignin(passport, req, res, next)
+            }).
+            catch(err => { next(err) })       
     })
                 
         
@@ -51,14 +57,13 @@ module.exports = function(app, passport) {
 
     app.post('/checkSession', (req, res) => {
         console.log("at /checkSession")
-        if (isLoggedIn) {
+        if (req.isAuthenticated()) {
             // TODO while we know the user is authenticated for the current session
             // can't find where the user data is stored!
             const user = req.user 
             return res.json({ user }) 
         }
     })
-    
 
     app.get('/auth/google',
     passport.authenticate('google', { scope: 
@@ -68,8 +73,8 @@ module.exports = function(app, passport) {
     
     app.get( '/auth/google/callback', 
         passport.authenticate( 'google', { 
-            successRedirect: '/',
-            failureRedirect: '/login_fail' // TODO implement
-    }))
+            failureRedirect: '/login_fail' /* TODO implement */ }),
+        (req, res) => { res.redirect('/@' + req.user.username) }
+    )
     
 }

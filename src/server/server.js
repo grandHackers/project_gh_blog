@@ -30,6 +30,7 @@ function connectToDB(host, port, dbName) {
 }
 
 connectToDB(config.DB_HOST, config.DB_PORT, config.DB_NAME)
+mongoose.Promise = require('bluebird') 
 
 var app = express()
 app.use(cookieParser())
@@ -53,7 +54,7 @@ app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
 
 // TODO implement
-require('../../config/passport')(passport) // configure passport
+require('./config/passport')(passport) // configure passport
 require('./routes/auth')(app, passport) // mount routes for signin/login auth
 
 // Mount API routers

@@ -26,8 +26,9 @@ export default class SignInForm extends Component {
     }
     
     transferToMainIfSignedIn() {
-        if (!!this.props.currentUser.id) {
-            const path = config.SUBDIR_URL + '/'
+        const username = this.props.currentUser.username
+        if (!!username) {
+            const path = config.SUBDIR_URL + '/@' + username
             this.context.router.push(path)
         }
     }
@@ -84,7 +85,6 @@ export default class SignInForm extends Component {
 }
 
 SignInForm.PropTypes = {
-    // TODO add currentUser
     signIn: PropTypes.func.isRequired, 
 }
 

@@ -6,7 +6,9 @@ import AddPostForm from '../components/addPostPage/AddPostForm'
 // of the current user
 
 const mapStateToProps = (state) => {
-  return {}
+  return {
+    currentUser: state.currentUser
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

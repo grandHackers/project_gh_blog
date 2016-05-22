@@ -23,6 +23,7 @@ export default class SignInModal extends Component {
         this.setContent = this.setContent.bind(this) 
         this.openDialog = this.openDialog.bind(this)
         this.closeDialog = this.closeDialog.bind(this)
+        console.log('sign in modal constructor!')
     }
     
     openDialog() {
@@ -64,6 +65,7 @@ export default class SignInModal extends Component {
                 onClick={this.closeDialog}
             />             
         ] 
+        console.log("at signinmodal render")
         return (
             <div id='sign-in'>
                 <FlatButton 

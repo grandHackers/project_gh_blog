@@ -26,8 +26,10 @@ export default class signUpForm extends Component {
     }
     
     transferToMainIfSignedIn() {
-        if (!!this.props.currentUser.id) {
-            const path = config.SUBDIR_URL + '/'
+        const username = this.props.currentUser.username
+        if (!!username) {
+            console.log('routing to /@' + username)
+            const path = config.SUBDIR_URL + '/@' + username
             this.context.router.push(path)
         }
     }
