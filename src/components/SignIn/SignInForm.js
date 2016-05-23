@@ -21,25 +21,9 @@ export default class SignInForm extends Component {
               margin: 'auto',
             }
         }
-        this.transferToMainIfSignedIn = this.transferToMainIfSignedIn.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
     
-    transferToMainIfSignedIn() {
-        const username = this.props.currentUser.username
-        if (!!username) {
-            const path = config.SUBDIR_URL + '/@' + username
-            this.context.router.push(path)
-        }
-    }
-    
-    componentWillMount() {
-        this.transferToMainIfSignedIn()
-    }
-    
-    componentDidUpdate() {
-        this.transferToMainIfSignedIn()
-    }
 
     handleSubmit(event) {
         event.preventDefault()       
@@ -48,7 +32,7 @@ export default class SignInForm extends Component {
         
         if (email && password) {
             console.log("Clicking signin")             
-            this.props.signIn(email, password)
+            this.props.signIn(email, password, this.context.router)
         }
         else {
             alert('Must provide both email and password.')
@@ -60,7 +44,7 @@ export default class SignInForm extends Component {
         return (           
             <div id='add-post-form'> 
             {/* change id=add-post-form to some class=sign-in-form and apply styling */}
-                <form action="" onSubmit={this.handleSubmit}>
+                <form>
                     <TextField 
                         hintText="email"
                         ref='email'

@@ -48,15 +48,26 @@ function signUpSuccess(user) {
     }
 }
 
-export function signUp(email, password, firstname, lastname) {
+export function signUp(email, password, firstname, lastname, router) {
     // for local signup
     const url = config.SUBDIR_URL + '/signup'
     const data = {email, password, firstname, lastname}
     const requestConfig = generatePostRequestConfig(data)
     return (dispatch) => {
         dispatch(requestSignUp())
-        return fetch(url, requestConfig).then(response => response.json())
-          .then(data => dispatch(signUpSuccess(data)))
+        return fetch(url, requestConfig)
+            .then(response => {
+                if (response.statusCode != 401) {
+                    return response.json()                   
+                } else {
+                    throw "Failed login!"
+                }                
+            })
+            .then(userData => {
+                dispatch(signUpSuccess(userData))
+                router.push(config.SUBDIR_URL + "/@" + userData.username)
+            })
+            .catch(err => console.log(err)) 
     }
 }
 
@@ -75,15 +86,26 @@ function signInSuccess(user) {
     }   
 }
 
-export function signIn(email, password) {
+export function signIn(email, password, router) {
     // for local signin
     return (dispatch) => {
         dispatch(requestSignIn(email))
         const data = {email, password} 
         const requestConfig = generatePostRequestConfig(data)
         return fetch(config.SUBDIR_URL + "/signin", requestConfig)
-          .then(response => response.json())
-          .then(data => dispatch(signInSuccess(data)))
+            .then(response => {
+                if (response.statusCode != 401) {
+                    return response.json()                   
+                } else {
+                    throw "Failed login!"
+                }                
+            })
+            .then(userData => {
+                dispatch(signInSuccess(userData))
+                console.log(router)
+                router.push(config.SUBDIR_URL + "/@" + userData.username)
+            })
+            .catch(err => console.log(err))          
     }
 }
 

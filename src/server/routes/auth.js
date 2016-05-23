@@ -10,7 +10,7 @@ function authenticateSignin(passport, req, res, next) {
     passport.authenticate('local-login', (err, user, info) => {
         console.log(user)
         if (err) { return next(err); }
-        if (!user) { return res.json(info); }
+        if (!user) { return res.status(401).json(info); }
         if (user) {
             req.logIn(user, function(err) {
                 if (err) { return next(err); }

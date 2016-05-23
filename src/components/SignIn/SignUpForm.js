@@ -21,25 +21,7 @@ export default class signUpForm extends Component {
               margin: 'auto',
             }
         }
-        this.transferToMainIfSignedIn = this.transferToMainIfSignedIn.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-    }
-    
-    transferToMainIfSignedIn() {
-        const username = this.props.currentUser.username
-        if (!!username) {
-            console.log('routing to /@' + username)
-            const path = config.SUBDIR_URL + '/@' + username
-            this.context.router.push(path)
-        }
-    }
-    
-    componentWillMount() {
-        this.transferToMainIfSignedIn()
-    }
-    
-    componentDidUpdate() {
-        this.transferToMainIfSignedIn()
     }
 
     handleSubmit(event) {
@@ -52,7 +34,8 @@ export default class signUpForm extends Component {
         // may instead use a form library 
         if (email && password && firstname && lastname) {
             console.log("Clicking signup")
-            this.props.signUp(email, password, firstname, lastname)
+            this.props.signUp(email, password, firstname, lastname, this.context.router)
+            return false
         }
         else {
             alert('Must provide both email and password.')
@@ -63,7 +46,7 @@ export default class signUpForm extends Component {
     render() {
         return (
             <div id='add-post-form'>
-                <form action="" onSubmit={this.handleSubmit}>
+                <form>
                     <TextField 
                         hintText="email"
                         ref='email'
