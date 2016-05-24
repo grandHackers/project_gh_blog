@@ -1,5 +1,6 @@
 var process = require('process')
 var fs = require('fs')
+var path = require('path')
 var env = process.env
 
 const serverConfig = {
@@ -24,15 +25,24 @@ const authConfig = {
     }
 }
 
-function writeConfigToFile(config, path) {    
-    console.log("Writing configuration file to " + path)   
-    content = "export default " + JSON.stringify(config)
-    fs.writeFile(path, content, function (err) {        
-        if (err) { // TODO log
-            throw err; 
-        }
-     
-    })        
+function writeConfigToFile(config, filePath) {    
+    var writeToFile = function() {
+        console.log("Writing configuration file to " + filePath)
+        content = "export default " + JSON.stringify(config)
+        fs.writeFile(filePath, content, function (err) {        
+            if (err) { // TODO log
+                throw err; 
+            }
+        })         
+    }
+    var dirPath = path.dirname(filePath)
+    if (!!fs.stat(dirPath)) {
+        console.log("Config directory doesn't exist at " + dirPath)
+        console.log("Creating config directory first ")
+        fs.mkdir(dirPath, writeToFile)
+    } else {
+        writeToFile()
+    }      
 }
 
 writeConfigToFile(serverConfig, __dirname + "/config/server-config.js")
