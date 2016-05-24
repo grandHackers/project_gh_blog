@@ -25,24 +25,28 @@ const authConfig = {
     }
 }
 
+
 function writeConfigToFile(config, filePath) {    
-    var writeToFile = function() {
+    var dirPath = path.dirname(filePath)
+    var writeConfig = function() {
         console.log("Writing configuration file to " + filePath)
         content = "export default " + JSON.stringify(config)
         fs.writeFile(filePath, content, function (err) {        
-            if (err) { // TODO log
+            if (err) { 
                 throw err; 
             }
-        })         
+        })        
     }
-    var dirPath = path.dirname(filePath)
-    if (!!fs.stat(dirPath)) {
-        console.log("Config directory doesn't exist at " + dirPath)
-        console.log("Creating config directory first ")
-        fs.mkdir(dirPath, writeToFile)
-    } else {
-        writeToFile()
-    }      
+    
+    fs.stat(dirPath, function(err, stats) {
+        if (err) {
+            console.log("Config directory doesn't exist at " + dirPath)
+            console.log("Creating config directory first ")
+            fs.mkdir(dirPath, writeConfig)  
+        } else {
+            writeConfig()
+        }
+    })
 }
 
 writeConfigToFile(serverConfig, __dirname + "/config/server-config.js")
