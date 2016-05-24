@@ -1,3 +1,4 @@
+
 - add some error handling when user tries to log in with invalid + non-existing credentials
 
 - actually just about all error handling on client side as well
@@ -11,5 +12,6 @@ maybe because the state changes when user's sign in / sign up request is success
 - architect the redux state
     How to do I go about editing a post? 
 https://github.com/reactjs/redux/issues/1385,)
+
 - when logging in with email, if user signed up using his/her gmail account, 
 let user just sign in with the google account instead
