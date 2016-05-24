@@ -1,7 +1,7 @@
 import { createUser } from '../api/user'
 import { getAvailableUsername } from '../util'
 
-export function isLoggedIn (req, res, next) {
+function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) { return next() }
     res.json({error: "Not signed in"})
 }
@@ -24,7 +24,7 @@ function authenticateSignin(passport, req, res, next) {
     })(req, res, next)    
 }
 
-module.exports = function(app, passport) {
+function addAuthRoutes(app, passport) {
     app.post('/signin', (req, res, next) => {
         console.log('at /signin')
         authenticateSignin(passport, req, res, next)
@@ -78,3 +78,5 @@ module.exports = function(app, passport) {
     )
     
 }
+
+export default addAuthRoutes

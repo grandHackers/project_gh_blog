@@ -1,14 +1,14 @@
-var LocalStrategy   = require('passport-local').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var authConfig = require('./auth')
-var faker = require('faker')
-
+import LocalPassport from 'passport-local'
+import GooglePassport from 'passport-google-oauth'
+import authConfig from '../../../config/auth'
 import { getUserById, getUserByEmail, getUserByUsername, createUser } from '../api/user'
 import { getAvailableUsername } from '../util'
-import mongoose from 'mongoose'
+import mongoose from 'mongoose' 
+import faker from 'faker'
 
+var LocalStrategy = LocalPassport.Strategy
+var GoogleStrategy = GooglePassport.OAuth2Strategy
 
-var User = mongoose.model('User')
 
 function getFilteredUserData(user) {
     var userObj = {
@@ -21,8 +21,7 @@ function getFilteredUserData(user) {
     return userObj
 }
 
-
-module.exports = function(passport) {
+function configurePassport(passport) {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         console.log('at serialize with user: ' + JSON.stringify(user))
@@ -36,7 +35,8 @@ module.exports = function(passport) {
             const userData = getFilteredUserData(user)
             done(null, userData);
         }).catch(err => done(err))
-    });    
+    });      
+    
     // =========================================================================
     // LOCAL LOGIN + SIGNUP ====================================================
     // =========================================================================
@@ -62,7 +62,7 @@ module.exports = function(passport) {
                 }).catch(err => { done(err) })
             }
         )
-    )
+    )    
 
     // =========================================================================
     // GOOGLE LOGIN + SIGNUP ===================================================
@@ -71,7 +71,7 @@ module.exports = function(passport) {
     passport.use(new GoogleStrategy({
         clientID: googleAuth.clientID,
         clientSecret: googleAuth.clientSecret,
-        callbackURL: "http://localhost/auth/google/callback" },
+        callbackURL: authConfig.google.callbackURL},
         
         function(accessToken, refreshToken, profile, done) {
             //https://developers.google.com/+/web/api/rest/latest/people#resource-representations
@@ -101,4 +101,7 @@ module.exports = function(passport) {
                 })
         }
     ))    
+    
 }
+
+export default configurePassport

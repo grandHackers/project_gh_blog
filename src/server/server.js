@@ -12,6 +12,8 @@ import path from 'path'
 import util from 'util'
 
 import config from '../../config/server-config.js'
+import configurePassport from './config/passport'
+import addAuthRoutes from './routes/auth'
 import { users, posts } from './routes'
 
 var logger = require('winston')
@@ -53,9 +55,8 @@ app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
 
-// TODO implement
-require('./config/passport')(passport) // configure passport
-require('./routes/auth')(app, passport) // mount routes for signin/login auth
+configurePassport(passport)
+addAuthRoutes(app, passport)
 
 // Mount API routers
 // TODO remove users routes! They shouldn't be exposed.
