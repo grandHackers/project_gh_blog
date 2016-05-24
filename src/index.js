@@ -1,5 +1,8 @@
 import React from 'react'
-import { Router, Route, browserHistory } from 'react-router'
+//import { Router, Route, browserHistory } from 'react-router'
+import { Router, Route, useRouterHistory } from 'react-router'
+import { createHistory } from 'history'
+
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
@@ -15,6 +18,10 @@ var initialStore = {
     posts: []
 }
 
+const browserHistory = useRouterHistory(createHistory)({
+  basename: config.SUBDIR_URL
+})
+
 let store = configureStore(initialStore);
 // in case of hard refresh, we can retrieve the session again
 // for now session just consists of current username
@@ -23,15 +30,9 @@ store.dispatch(Actions.checkSessionStatus())
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path={config.SUBDIR_URL + "/"}  component={App} />
-      <Route path={config.SUBDIR_URL + "/@:owner"} component={App} />
-      <Route path={config.SUBDIR_URL + "/addPost"} component={AddPostForm} />
-      {/*
-      <Route path={config.SUBDIR_URL + "/signInPage"} component={SignInPage} />
-      <Route path={config.SUBDIR_URL + "/signInForm"} component={SignInForm} />
-      <Route path={config.SUBDIR_URL + "/signUpForm"} component={SignUpForm} />         
-        */ }
-
+      <Route path={"/"}  component={App} />
+      <Route path={"/@:owner"} component={App} />
+      <Route path={"/addPost"} component={AddPostForm} />
     </Router>
   </Provider>,
   document.getElementById('root')

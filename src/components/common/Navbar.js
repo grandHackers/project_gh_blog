@@ -27,7 +27,7 @@ export default class NavBar extends React.Component {
     
     loadAddPostForm() {
         console.log("Clicked on Add post!")
-        const path = config.SUBDIR_URL + '/addPost'
+        const path = '/addPost'
         this.context.router.push(path)
     }
 
@@ -55,7 +55,7 @@ export default class NavBar extends React.Component {
                 console.log('Clicked on sign out!')
                 this.props.signOut()
                 
-                const path = config.SUBDIR_URL + '/' 
+                const path = '/' 
                 this.context.router.push(path)
             }
             return (

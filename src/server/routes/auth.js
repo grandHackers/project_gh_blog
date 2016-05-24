@@ -1,5 +1,6 @@
 import { createUser } from '../api/user'
 import { getAvailableUsername } from '../util'
+import config from '../../../config/server-config'
 
 function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) { return next() }
@@ -74,7 +75,7 @@ function addAuthRoutes(app, passport) {
     app.get( '/auth/google/callback', 
         passport.authenticate( 'google', { 
             failureRedirect: '/login_fail' /* TODO implement */ }),
-        (req, res) => { res.redirect('/@' + req.user.username) }
+        (req, res) => { res.redirect( config.SUBDIR_URL + '/@' + req.user.username) }
     )
     
 }

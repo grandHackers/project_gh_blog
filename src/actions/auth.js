@@ -65,7 +65,7 @@ export function signUp(email, password, firstname, lastname, router) {
             })
             .then(userData => {
                 dispatch(signUpSuccess(userData))
-                router.push(config.SUBDIR_URL + "/@" + userData.username)
+                router.push("/@" + userData.username)
             })
             .catch(err => console.log(err)) 
     }
@@ -103,7 +103,7 @@ export function signIn(email, password, router) {
             .then(userData => {
                 dispatch(signInSuccess(userData))
                 console.log(router)
-                router.push(config.SUBDIR_URL + "/@" + userData.username)
+                router.push("/@" + userData.username)
             })
             .catch(err => console.log(err))          
     }

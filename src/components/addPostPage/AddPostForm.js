@@ -39,7 +39,7 @@ export default class AddPostForm extends Component {
             console.log("Adding New Post")             
             this.props.addNewPost(title, content)
             console.log("Going back to main feed page")
-            const path = config.SUBDIR_URL + '/@' + this.props.currentUser.username
+            const path = '/@' + this.props.currentUser.username
             this.context.router.push(path)            
         }
         else {
