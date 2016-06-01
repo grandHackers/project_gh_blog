@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import Actions from '../actions'
 import React, { Component, PropTypes } from 'react'
-import TextField from 'material-ui/lib/TextField'
-import RaisedButton from 'material-ui/lib/raised-button'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
 
 export class AddPostForm extends Component {
     constructor(props, context) {

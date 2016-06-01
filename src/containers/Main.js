@@ -3,12 +3,16 @@ import { connect } from 'react-redux'
 import Navbar from './Navbar'
 import Footer from '../components/Footer'
 import Feed from './Feed'
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+
+const lightMuiTheme = getMuiTheme(lightBaseTheme)
 
 export class Main extends React.Component {
     constructor(props) {
         super(props)
     }
-    
     
     render() { 
         var feed;
@@ -18,11 +22,13 @@ export class Main extends React.Component {
             feed = <Feed owner={owner}/>
         }
         return (
-            <div>
-                <Navbar />
-                {feed}
-                <Footer />
-            </div>
+            <MuiThemeProvider muiTheme={lightMuiTheme}>            
+                <div>
+                    <Navbar />
+                    {feed}
+                    <Footer />
+                </div>
+            </MuiThemeProvider>
         );
     }
 }

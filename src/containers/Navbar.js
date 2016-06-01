@@ -2,8 +2,13 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Actions from '../actions'
 import { Link } from 'react-router'
-import AppBar from 'material-ui/lib/app-bar'
-import FlatButton from 'material-ui/lib/flat-button'
+import AppBar from 'material-ui/AppBar'
+
+import IconMenu from 'material-ui/IconMenu'
+import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import FlatButton from 'material-ui/FlatButton'
 import SignInModal from '../components/SignInModal'
 
 export class NavBar extends React.Component {
@@ -45,7 +50,18 @@ export class NavBar extends React.Component {
         }
         return button
     }
-    
+    showUserMenu() {
+        return (
+            <IconMenu
+            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            >
+                <MenuItem primaryText="Settings" />
+                <MenuItem primaryText="Sign out" />            
+            </IconMenu>
+        )
+    }
     showSignInButton() {
         if (!this.props.currentUser.username) {
             return <SignInModal />
@@ -76,6 +92,7 @@ export class NavBar extends React.Component {
                showMenuIconButton={false}>
                 {this.showAddPostPageButton()}
                 {this.showSignInButton()}
+                {this.showUserMenu()}
             </AppBar>
         );
 

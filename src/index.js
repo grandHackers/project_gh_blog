@@ -1,17 +1,20 @@
 import React from 'react'
-//import { Router, Route, browserHistory } from 'react-router'
-import { Router, Route, useRouterHistory } from 'react-router'
-import { createHistory } from 'history'
-
 import { render } from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import configureStore from './store/configureStore'
 
+import { Router, Route, useRouterHistory } from 'react-router'
+import { createHistory } from 'history'
+
 import Actions from './actions'
-import App from './containers/Main'
+import Main from './containers/Main'
 import AddPostForm from './containers/AddPostForm'
 import config from '../config/client-config'
+
+injectTapEventPlugin()
 
 var initialStore = {
     currentUser: {},
@@ -27,11 +30,13 @@ let store = configureStore(initialStore);
 // for now session just consists of current username
 store.dispatch(Actions.checkSessionStatus()) 
 
+
+
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path={"/"}  component={App} />
-      <Route path={"/@:owner"} component={App} />
+      <Route path={"/"}  component={Main} />
+      <Route path={"/@:owner"} component={Main} />
       <Route path={"/addPost"} component={AddPostForm} />
     </Router>
   </Provider>,

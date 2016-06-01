@@ -18,15 +18,20 @@ let user just sign in with the google account instead
 
 
 Process:
-- combining component code with connect code onto one file -> TEST
+- combining component code with connect code onto one file -> DONE
+
 - add user Settings (
 		edit username - async validation.)
+			1. instead of 'sign out', now just put some iconMenu to show 'settings' or 'sign out' option
+			2. make a setting page that resembles some form to change username (async validation)
+			3. hook up 
+
 - add edit post functionality
 - add remove post functionality
-
+- rename subdir_url --> basename
 - add validation for:
-	+ login ( allow user to login via username ? )
-	+ signup ( just let user decide what they want for their username )
+	+ login
+	+ signup
 	+ post fetching
 	+ post creation
 	+ post edit
