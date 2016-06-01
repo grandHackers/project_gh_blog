@@ -1,9 +1,35 @@
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Actions from '../actions'
-import Feed from '../components/mainPage/Feed'
+import FeedItem from '../components/FeedItem'
 
-// Currently assuming that current feed only consists of posts
-// of the current user
+export class Feed extends Component {
+    constructor(props) {
+        super(props)
+    }
+    
+    componentDidMount() {
+        this.props.fetchPosts(this.props.owner)
+    }
+        
+    render() {
+        const feedItems = this.props.posts.map( 
+            item => <FeedItem {...item} /> )
+        return (
+            <div id='feed-background'>
+                <div className='feed'> 
+                    {feedItems} 
+                </div>
+            </div>
+        );
+    }    
+    
+}
+
+Feed.PropTypes = {
+    fetchPosts: PropTypes.func.isRequired,
+    posts: PropTypes.array.isRequired 
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -24,9 +50,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const FeedContainer = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Feed)
-
-export default FeedContainer

@@ -1,8 +1,32 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import Main from '../components/mainPage/Main'
+import Navbar from './Navbar'
+import Footer from '../components/Footer'
+import Feed from './Feed'
 
-// Currently assuming that current feed only consists of posts
-// of the current user
+export class Main extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    
+    
+    render() { 
+        var feed;
+        console.log("owner: " + this.props.params.owner)
+        const owner = this.props.params.owner
+        if (!!owner) {
+            feed = <Feed owner={owner}/>
+        }
+        return (
+            <div>
+                <Navbar />
+                {feed}
+                <Footer />
+            </div>
+        );
+    }
+}
+
 
 const mapStateToProps = (state) => {
   return {
@@ -10,7 +34,5 @@ const mapStateToProps = (state) => {
   }
 }
 
-const MainContainer = connect(
+export default connect(
   mapStateToProps)(Main)
-
-export default MainContainer

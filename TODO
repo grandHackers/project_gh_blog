@@ -15,3 +15,56 @@ https://github.com/reactjs/redux/issues/1385,)
 
 - when logging in with email, if user signed up using his/her gmail account, 
 let user just sign in with the google account instead
+
+
+Process:
+- combining component code with connect code onto one file -> TEST
+- add user Settings (
+		edit username - async validation.)
+- add edit post functionality
+- add remove post functionality
+
+- add validation for:
+	+ login ( allow user to login via username ? )
+	+ signup ( just let user decide what they want for their username )
+	+ post fetching
+	+ post creation
+	+ post edit
+	+ post removal
+	( redux form ? async validation )
+
+
+Stuff to consider doing (learned from Real World Example):
+- combine connect with actual react components on the same page
+- change string concatenation syntax to ES6 one (ex: fullName + " is cool " --> `${fullName} is cool`)
+- make a custom middleware for handling api calls. so no action creator will actually be individually making api calls, it will just return some action type that is to be interpreted by the middleware. (actually this is really only useful if we are making several api calls to different resources??? - TBD)
+[
+State:
+
+entities: // original resource representation returned by the api? or something like that
+	users // user cache
+	repos // repo cache
+pagination:
+	starredByUser:
+		[user1]:
+			isFetching
+		  nextPageUrl
+		  ids // of repo names
+		  [pageCount]
+		 [user2]:
+		 		...
+	stargazersByRepo:
+		[repo1]	
+			isFetching
+			nextPageUrl
+			ids // of users
+			[pageCount]
+		[repo2]
+			...
+errorMessage: 
+routing:
+
+
+]
+
+
