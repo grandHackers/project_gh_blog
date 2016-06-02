@@ -2,9 +2,12 @@ import { createUser } from '../api/user'
 import { getAvailableUsername } from '../util'
 import config from '../../../config/server-config'
 
-function isLoggedIn (req, res, next) {
-    if (req.isAuthenticated()) { return next() }
-    res.json({error: "Not signed in"})
+export function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()) { 
+        return next() }
+    else {
+        res.status(401).json({error: "Not signed in"})    
+    }
 }
 
 function authenticateSignin(passport, req, res, next) {

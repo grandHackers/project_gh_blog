@@ -7,7 +7,7 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-const lightMuiTheme = getMuiTheme(lightBaseTheme)
+const theme = getMuiTheme(lightBaseTheme)
 
 export class Main extends React.Component {
     constructor(props) {
@@ -15,17 +15,13 @@ export class Main extends React.Component {
     }
     
     render() { 
-        var feed;
-        console.log("owner: " + this.props.params.owner)
-        const owner = this.props.params.owner
-        if (!!owner) {
-            feed = <Feed owner={owner}/>
-        }
         return (
-            <MuiThemeProvider muiTheme={lightMuiTheme}>            
+            <MuiThemeProvider muiTheme={theme}>            
                 <div>
                     <Navbar />
-                    {feed}
+                    <div id='content'>
+                        {this.props.children}
+                    </div>
                     <Footer />
                 </div>
             </MuiThemeProvider>

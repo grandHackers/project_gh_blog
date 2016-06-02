@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import User from '../models/user';
 
-export function getUserById(userId, callback) {
+export function getUserById(userId) {
     /* Retrieves a information about a user
      * @param {string} userId      id of the user document      
-     * @param {function} callback   callback function accepting an error and user document 
+     * returns a Promise 
      */
     return User.
         findById(userId).
@@ -16,6 +16,12 @@ export function getUserByEmail(email) {
     // make sure to not give out password    
     return User.
         findOne({email}).
+        exec()
+}
+
+export function getUserByUsername(username) {
+    return User.
+        findOne({username}).
         exec()
 }
 
@@ -51,4 +57,10 @@ export function createUser(email, password, username, firstname, lastname, googl
     
     var user = new User(data)
     return user.save()
+}
+
+export function editUsername(userId, username) {
+    return User.findByIdAndUpdate(userId, 
+        {$set: { username }}, {new: true} )
+        .exec()
 }

@@ -32,6 +32,8 @@ export const currentUser = ( state = {}, action ) => {
             return userInfo
         case Actions.SIGN_OUT_SUCCESS:
             return {}
+        case Actions.UPDATE_USERNAME_SUCCESS:
+            return userInfo
         default:
             return state
     }

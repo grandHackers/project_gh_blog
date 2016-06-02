@@ -22,8 +22,8 @@ Process:
 
 - add user Settings (
 		edit username - async validation.)
-			1. instead of 'sign out', now just put some iconMenu to show 'settings' or 'sign out' option
-			2. make a setting page that resembles some form to change username (async validation)
+			1. instead of 'sign out', now just put some menu (Hello, Erika!) to show 'settings' or 'sign out' option --> DONE
+			2. make a setting page that resembles some form to change username 
 			3. hook up 
 
 - add edit post functionality

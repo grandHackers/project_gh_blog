@@ -7,9 +7,9 @@ export class Feed extends Component {
     constructor(props) {
         super(props)
     }
-    
+
     componentDidMount() {
-        this.props.fetchPosts(this.props.owner)
+        this.props.fetchPosts(this.props.params.owner)
     }
         
     render() {
@@ -33,8 +33,7 @@ Feed.PropTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    posts: state.posts,
-    currentUser: state.currentUser
+    posts: state.posts
   }
 }
 

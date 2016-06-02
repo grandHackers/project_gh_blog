@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch'
-import process from 'process'
 import { generateGetRequestConfig, generatePostRequestConfig } from './util.js'
 
 

@@ -2,16 +2,6 @@ var Promise = require('promise');
 var faker = require('faker')
 import { getUserByUsername } from './api/user'
 
-export function respondWithData(res) {
-    return (err, doc) => {
-        if (err) {
-            console.error(err);
-            return next(err);
-        }
-        res.json(doc)        
-    }
-}
-
 export function getAvailableUsername(defaultUsername) {
     var username = defaultUsername
     const minLength = 4

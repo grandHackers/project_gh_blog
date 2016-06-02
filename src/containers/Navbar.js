@@ -17,6 +17,8 @@ export class NavBar extends React.Component {
         context.router
         this.loadAddPostForm = this.loadAddPostForm.bind(this)
         this.showAddPostPageButton = this.showAddPostPageButton.bind(this)
+        this.showActions = this.showActions.bind(this)
+        this.showUserMenu = this.showUserMenu.bind(this)
         this.styles = {
             root: {   
                 position: "fixed",
@@ -37,11 +39,20 @@ export class NavBar extends React.Component {
         this.context.router.push(path)
     }
 
+
+    showActions() {
+        if (!this.props.currentUser.username) {
+            return <SignInModal />              
+        } else {
+            return [this.showAddPostPageButton(), this.showUserMenu()]
+        }
+    }
+
     showAddPostPageButton() {
         // TODO need to get the current route name
         // and render the add post page button if current route is at the index
         var button;
-        if (!!this.props.currentUser.id) {
+        if (!!this.props.currentUser.username) {
             button = (
                 <FlatButton
                     label="Write a story"
@@ -49,39 +60,35 @@ export class NavBar extends React.Component {
                     onClick={this.loadAddPostForm}/>)            
         }
         return button
-    }
+    }    
+    
     showUserMenu() {
+        const handleSignOut = () => { 
+            console.log('Clicked on sign out!')
+            this.props.signOut()
+            
+            const path = '/' 
+            this.context.router.push(path)
+        }
+        const loadSettings = () => {
+            const path = '/me/settings'
+            this.context.router.push(path)
+        }
         return (
             <IconMenu
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             >
-                <MenuItem primaryText="Settings" />
-                <MenuItem primaryText="Sign out" />            
+                <MenuItem 
+                    primaryText="Settings" 
+                    onClick={loadSettings}
+                />
+                <MenuItem primaryText="Sign out" 
+                   onClick={handleSignOut}
+                />            
             </IconMenu>
         )
-    }
-    showSignInButton() {
-        if (!this.props.currentUser.username) {
-            return <SignInModal />
-           
-        } else {
-            const label = 'Sign out' 
-            const handleSignOut = () => { 
-                console.log('Clicked on sign out!')
-                this.props.signOut()
-                
-                const path = '/' 
-                this.context.router.push(path)
-            }
-            return (
-                <FlatButton 
-                    label={label}
-                    onClick={handleSignOut} 
-                    style={this.styles.button}/>             
-            )              
-        }    
     }
     
     render() { 
@@ -90,9 +97,7 @@ export class NavBar extends React.Component {
                style={this.styles.root}
                title={<span style={this.styles.title}> SimpleBlog </span>}
                showMenuIconButton={false}>
-                {this.showAddPostPageButton()}
-                {this.showSignInButton()}
-                {this.showUserMenu()}
+               {this.showActions()}
             </AppBar>
         );
 

@@ -75,7 +75,7 @@ export class AddPostForm extends Component {
                         onClick={this.handleSubmit}
                     />
                 </form>
-            </div>
+            </div>           
         );
     }    
 }

@@ -9,10 +9,13 @@ import configureStore from './store/configureStore'
 import { Router, Route, useRouterHistory } from 'react-router'
 import { createHistory } from 'history'
 
+import config from '../config/client-config'
 import Actions from './actions'
 import Main from './containers/Main'
+import Feed from './containers/Feed'
 import AddPostForm from './containers/AddPostForm'
-import config from '../config/client-config'
+import Settings from './containers/Settings'
+
 
 injectTapEventPlugin()
 
@@ -30,14 +33,14 @@ let store = configureStore(initialStore);
 // for now session just consists of current username
 store.dispatch(Actions.checkSessionStatus()) 
 
-
-
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path={"/"}  component={Main} />
-      <Route path={"/@:owner"} component={Main} />
-      <Route path={"/addPost"} component={AddPostForm} />
+      <Route path={"/"}  component={Main}>
+        <Route path={"/@:owner"} component={Feed} />
+        <Route path={'/me/settings'} component={Settings} />
+        <Route path={"/addPost"} component={AddPostForm} />
+      </Route>
     </Router>
   </Provider>,
   document.getElementById('root')
