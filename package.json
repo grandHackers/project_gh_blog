@@ -1,5 +1,5 @@
 {
-  "name": "MeetflixFrontPage",
+  "name": "SimpleBlog",
   "version": "0.0.1",
   "description": "Meet Front Page",
   "main": "src/server/server.js",

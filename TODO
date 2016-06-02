@@ -29,7 +29,7 @@ Process:
 - have "Hello, <user>" at the navigation menu --> DONE
 - add edit post functionality  --> DONE
 - add remove post functionality --> DONE
-- rename subdir_url --> basename
+- rename subdir_url --> basename (DONE) 
 - add validation for:
 	+ login
 	+ signup
@@ -40,6 +40,7 @@ Process:
 	( redux form ? async validation )
 - refactor code * (TBD)
 - fix CSS (seriously.)
+- (make sure to also edit SUBDIR_URL to BASE_URL accordingly in project_gh_env)
 
 
 Stuff to consider doing (learned from Real World Example):
