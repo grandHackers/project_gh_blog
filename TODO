@@ -25,7 +25,8 @@ Process:
 			1. instead of 'sign out', now just put some menu (Hello, Erika!) to show 'settings' or 'sign out' option --> DONE
 			2. make a setting page that resembles some form to change username 
 			3. hook up 
-
+---> DONE
+- have "Hello, <user>" at the navigation menu --> DONE
 - add edit post functionality
 - add remove post functionality
 - rename subdir_url --> basename
@@ -37,6 +38,8 @@ Process:
 	+ post edit
 	+ post removal
 	( redux form ? async validation )
+- refactor code * (TBD)
+- fix CSS (seriously.)
 
 
 Stuff to consider doing (learned from Real World Example):

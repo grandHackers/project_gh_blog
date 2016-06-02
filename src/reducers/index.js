@@ -11,6 +11,17 @@ export const posts = (state = [], action) => {
             action.post,
             ...state,
         ]
+    case Actions.EDIT_POST_SUCCESS:
+        var restState = state.slice()
+        const idx = restState.findIndex(post => { 
+            return post.id === action.post.id
+        })
+        restState.splice(idx, 1)
+        
+        return [
+            action.post, 
+            ...restState
+        ]
     default:
         // ignore REQUEST_* actions for now
         return state

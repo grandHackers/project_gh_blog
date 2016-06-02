@@ -6,15 +6,32 @@ import {
     getPostsByOwnerId, 
     createPost, 
     editPost } from '../api/post';
-
+import { isLoggedIn } from './auth'
 var router = express.Router()
 var logger = require('winston')
+
+function isAuthorized(req, res, next) {
+    console.log('inside isAuthorized for post access')
+    
+    const postId = req.params.postId
+    const postOwner = getPostById(postId)
+        .then(post => {
+            if (post.owner_id !== req.user.id) {
+                return res.status(403).json({
+                    error: "The user is not the owner of the post. Request denied"
+                })                    
+            } else {
+                next()
+            } 
+        })
+        .catch(error => next(error))
+}
 
 function getFilteredPostData(post, owner) {
     // take out owner_id field with
     // owner (username) instead
-    console.log(owner)
     const handledPostData = {
+        id: post._id,
         title: post.title,
         content: post.content, 
         created_at: post.created_at,
@@ -25,8 +42,7 @@ function getFilteredPostData(post, owner) {
 }
 
 router.get('/', (req, res, next) => {
-    // do I have users?
-    // /posts?owner=erikay
+    // querying posts by owner (username)
     console.log('GET on /posts')
     const owner = req.query.owner
     if (!!owner) {
@@ -49,52 +65,27 @@ router.post('/', (req, res, next) => {
     } else {
         const user = req.user
         const { title, content } = req.body;
-        createPost(user.id, title, content).
-            then(post => {
+        createPost(user.id, title, content)
+            .then(post => {
                 const processedPost = getFilteredPostData(post, user.username)
                 res.json(processedPost)
-            }).
-            catch(err => next(err))
+            })
+            .catch(err => next(err))
     }
 })
 
 
-//Uncomment and Implement me
-// for getting post details
-/*
-router.get('/:postId', (req, res, next) => {
-    console.log("Getting Post Details")
-})*/
+router.put('/:postId', isLoggedIn, isAuthorized, (req, res, next) => {
+    const postId = req.params.postId
+    const { title, content } = req.body
 
-// edit a post
-router.post('/:postId', (req, res, next) => {
-    console.log("Editing a post")
-    if (!req.isAuthenticated()) {
-        // TODO respond with better error message to the client
-        res.status(401).json({
-            error: "user not logged in" })
-    } else {
-        const postId = req.params.postId
-        const { title, content } = req.body
-
-        getPostById(postId).
-            then(post => { 
-                if (post.userId != req.user.id) {
-                    return res.status(403).json({
-                        error: "The user is not the owner of the post. Request denied"
-                    })                    
-                } else {
-                    return editPost(postId, title, content).
-                        then(post => {
-                            const processedPost = getFilteredPostData(post, user.username)
-                            res.json(processedPost)                            
-                        })
-                }
-            }).
-            catch(err => next(err))
-    }
+    return editPost(postId, title, content)
+        .then(post => {
+            const processedPost = getFilteredPostData(
+                post, req.user.username)
+            res.status(200).json(processedPost)                            
+        })
+        .catch(err => next(err))
 })
-
-
 
 export default router;

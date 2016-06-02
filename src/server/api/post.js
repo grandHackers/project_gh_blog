@@ -12,10 +12,10 @@ export function getPostById(postId) {
 }
 
 export function getPostsByOwnerId(ownerId) {
-    return Post.
-        find({ owner_id: ownerId }).
-        sort('-created_at').
-        exec()
+    return Post
+        .find({ owner_id: ownerId })
+        .sort({ 'updated_at': -1, 'created_at': -1, })
+        .exec()
 }
 
 export function createPost(ownerId, title, content) {

@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import { generateGetRequestConfig, generatePostRequestConfig } from './util.js'
-
+import callApi from '../api'
 
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -62,8 +62,6 @@ export function createPost(title, content) {
     // only on their own blog, so not doing any validation here.
     return function (dispatch, getState) {
         const state = getState()
-        //const ownerId = state.currentUser.id
-        //var payload = { ownerId, title, content }
         var payload = { title, content }
         const requestConfig = generatePostRequestConfig(payload)
         dispatch(requestCreatePost(payload))
@@ -75,3 +73,47 @@ export function createPost(title, content) {
     }
 }
 
+export const REQUEST_EDIT_POST = "REQUEST_EDIT_POST"
+export const EDIT_POST_SUCCESS = "EDIT_POST_SUCCESS"
+export const EDIT_POST_FAILURE = "EDIT_POST_FAILURE"
+
+function requestEditPost(postId, title, content) {
+    return {
+        type: REQUEST_EDIT_POST,
+        postId,
+        title,
+        content
+    }
+}
+
+function editPostSuccess(post) {
+    return {
+        type: EDIT_POST_SUCCESS,
+        post
+    }
+}
+
+function editPostFailure() {
+    return {
+        type: EDIT_POST_FAILURE
+    }
+}
+
+
+export function editPost(postId, title, content) {
+    return function (dispatch, getState) {
+        var payload = { title, content }
+        dispatch(requestEditPost(postId, title, content))
+        callApi(`/posts/${postId}`, 'PUT', payload)
+            .then(response => {
+                if (response.status >= 400) {
+                    return Promise.reject()
+                } else {
+                    return response.json()
+                }
+            })
+            .then(data => dispatch(editPostSuccess(data)),
+                  () => dispatch(editPostFailure()))
+            .catch(error => {console.error(error)})
+    }
+}

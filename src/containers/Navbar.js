@@ -44,7 +44,10 @@ export class NavBar extends React.Component {
         if (!this.props.currentUser.username) {
             return <SignInModal />              
         } else {
-            return [this.showAddPostPageButton(), this.showUserMenu()]
+            return [
+                <span>{`Hi, ${this.props.currentUser.username}`}</span>,
+                this.showAddPostPageButton(), 
+                this.showUserMenu()]
         }
     }
 
@@ -76,10 +79,10 @@ export class NavBar extends React.Component {
         }
         return (
             <IconMenu
-            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            >
+                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            >         
                 <MenuItem 
                     primaryText="Settings" 
                     onClick={loadSettings}

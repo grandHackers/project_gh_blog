@@ -61,7 +61,7 @@ router.put('/:id', isLoggedIn, isAuthorized, function(req, res, next) {
                     // update session username accordingly
                     req.user.username = user.username
                     console.log('updated user: ' + user)
-                    res.status(200).json(user)
+                    res.status(200).json(req.user)
                 } else {
                     const message = "Errr not getting user resource back after edit" 
                     console.error(message)
