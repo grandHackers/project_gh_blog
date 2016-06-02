@@ -1,6 +1,14 @@
 import { combineReducers } from 'redux'
 import Actions from '../actions'
 
+function filterPosts(postState, deleteId) {
+    var remState = postState.slice()
+    var idx = remState.findIndex(
+        post => post.id === deleteId
+    )
+    remState.splice(idx, 1)
+    return remState
+}
 
 export const posts = (state = [], action) => {
   switch (action.type) {
@@ -12,16 +20,14 @@ export const posts = (state = [], action) => {
             ...state,
         ]
     case Actions.EDIT_POST_SUCCESS:
-        var restState = state.slice()
-        const idx = restState.findIndex(post => { 
-            return post.id === action.post.id
-        })
-        restState.splice(idx, 1)
-        
+        var remState = filterPosts(state, action.post.id)        
         return [
             action.post, 
-            ...restState
+            ...remState
         ]
+    case Actions.DELETE_POST_SUCCESS:
+        var remState = filterPosts(state, action.postId)
+        return remState
     default:
         // ignore REQUEST_* actions for now
         return state

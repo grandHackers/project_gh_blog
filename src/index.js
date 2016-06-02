@@ -26,7 +26,7 @@ var initialStore = {
 }
 
 const browserHistory = useRouterHistory(createHistory)({
-  basename: config.SUBDIR_URL
+  basename: config.BASE_URL
 })
 
 let store = configureStore(initialStore);

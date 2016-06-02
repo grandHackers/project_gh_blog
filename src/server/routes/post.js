@@ -5,7 +5,9 @@ import {
     getPostById, 
     getPostsByOwnerId, 
     createPost, 
-    editPost } from '../api/post';
+    editPost,
+    deletePost
+ } from '../api/post';
 import { isLoggedIn } from './auth'
 var router = express.Router()
 var logger = require('winston')
@@ -85,6 +87,22 @@ router.put('/:postId', isLoggedIn, isAuthorized, (req, res, next) => {
                 post, req.user.username)
             res.status(200).json(processedPost)                            
         })
+        .catch(err => next(err))
+})
+
+
+router.delete('/:postId', isLoggedIn, isAuthorized, (req, res, next) => {
+    const postId = req.params.postId
+    return deletePost(postId)
+        .then(
+            () => res.status(200).json({}),
+            (err) => {
+                // consider checking if this is performed on an existing post first
+                // in the api helper function
+                console.log(`delete Post ${postId} unsuccessful`)
+                res.status(500).json({error: "delete post is unsuccessful for some reason"})
+            }
+        )
         .catch(err => next(err))
 })
 

@@ -78,7 +78,7 @@ function addAuthRoutes(app, passport) {
     app.get( '/auth/google/callback', 
         passport.authenticate( 'google', { 
             failureRedirect: '/login_fail' /* TODO implement */ }),
-        (req, res) => { res.redirect( config.SUBDIR_URL + '/@' + req.user.username) }
+        (req, res) => { res.redirect( config.BASE_URL + '/@' + req.user.username) }
     )
     
 }

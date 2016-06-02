@@ -68,7 +68,7 @@ app.use('/api/posts', posts)
 app.get('*', (req, res, next) => {
     console.log('in get *: user ' + req.user)
     res.render(path.resolve(__dirname, '..' , '..', 'views', 'index.ejs'), 
-               { main_js: 'main.js', main_css: 'main.css', subdir_url: config.SUBDIR_URL});
+               { main_js: 'main.js', main_css: 'main.css', base_url: config.BASE_URL});
 });
 
 app.listen( config.APP_PORT , function() { 

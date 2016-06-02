@@ -30,7 +30,7 @@ function receiveSessionStatus(status) {
 export function checkSessionStatus() {
     return (dispatch) => {
         dispatch(requestSessionStatus())
-        var url = config.SUBDIR_URL + "/checkSession"
+        var url = config.BASE_URL + "/checkSession"
         const requestConfig = generatePostRequestConfig()
         return fetch(url, requestConfig).then(response => response.json())
           .then(result => dispatch(receiveSessionStatus(result)) )
@@ -50,7 +50,7 @@ function signUpSuccess(user) {
 
 export function signUp(email, password, firstname, lastname, router) {
     // for local signup
-    const url = config.SUBDIR_URL + '/signup'
+    const url = config.BASE_URL + '/signup'
     const data = {email, password, firstname, lastname}
     const requestConfig = generatePostRequestConfig(data)
     return (dispatch) => {
@@ -92,7 +92,7 @@ export function signIn(email, password, router) {
         dispatch(requestSignIn(email))
         const data = {email, password} 
         const requestConfig = generatePostRequestConfig(data)
-        return fetch(config.SUBDIR_URL + "/signin", requestConfig)
+        return fetch(config.BASE_URL + "/signin", requestConfig)
             .then(response => {
                 if (response.statusCode != 401) {
                     return response.json()                   
@@ -117,7 +117,7 @@ export function signOut() {
     const requestConfig = generatePostRequestConfig()
     return (dispatch) => {
         dispatch(requestSignOut())
-        return fetch(config.SUBDIR_URL + "/signout", requestConfig) 
+        return fetch(config.BASE_URL + "/signout", requestConfig) 
           .then(dispatch(signOutSuccess()))
     }    
 }

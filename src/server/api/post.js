@@ -38,3 +38,9 @@ export function editPost(postId, title, content) {
             return post.save()
         })
 }
+
+export function deletePost(postId) {
+    return Post
+        .remove({_id: postId})
+        .exec()
+}

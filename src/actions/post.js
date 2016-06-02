@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import { generateGetRequestConfig, generatePostRequestConfig } from './util.js'
 import callApi from '../api'
+import config from '../../config/client-config.js'
 
 export const REQUEST_GET_POSTS = 'REQUEST_GET_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -8,7 +9,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
 export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
-import config from '../../config/client-config.js'
+
 
 
 function requestGetPosts(ownerId) {
@@ -99,7 +100,7 @@ function editPostFailure() {
     }
 }
 
-
+//
 export function editPost(postId, title, content) {
     return function (dispatch, getState) {
         var payload = { title, content }
@@ -115,5 +116,49 @@ export function editPost(postId, title, content) {
             .then(data => dispatch(editPostSuccess(data)),
                   () => dispatch(editPostFailure()))
             .catch(error => {console.error(error)})
+    }
+}
+
+
+export const REQUEST_DELETE_POST = 'REQUEST_DELETE_POST'
+export const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS'
+export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE'
+
+const requestDeletePost = postId => { 
+    return {
+        type: REQUEST_DELETE_POST,
+        postId 
+    } 
+}
+
+const deletePostSuccess = postId => {
+    return {
+        type: DELETE_POST_SUCCESS,
+        postId
+    }
+}
+
+const deletePostFailure = postId => {
+    return {
+        type: DELETE_POST_FAILURE,
+        postId
+    }
+}
+
+//
+export function deletePost(postId) {
+    return function (dispatch, getState) {
+        dispatch(requestDeletePost(postId))
+        callApi(`/posts/${postId}`, 'DELETE')
+            .then(response => {
+                if (response.status === 200) {
+                    dispatch(deletePostSuccess(postId))
+                    return Promise.resolve()
+                } else {
+                    dispatch(deletePostFailure(postId))
+                    return Promise.reject()
+                }
+            })
+            .catch(error => console.error(error))
     }
 }
