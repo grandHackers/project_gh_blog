@@ -1,6 +1,8 @@
 import { createUser } from '../api/user'
 import { getAvailableUsername } from '../util'
 import config from '../../../config/server-config'
+import mongoose from 'mongoose'
+
 
 export function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) { 
@@ -13,8 +15,12 @@ export function isLoggedIn (req, res, next) {
 function authenticateSignin(passport, req, res, next) {
     passport.authenticate('local-login', (err, user, info) => {
         console.log(user)
-        if (err) { return next(err); }
-        if (!user) { return res.status(401).json(info); }
+        if (err) { 
+            return next(err)
+        }
+        if (!user) {
+            return res.status(401).json({error: info.message})
+        }
         if (user) {
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
@@ -38,17 +44,39 @@ function addAuthRoutes(app, passport) {
         console.log('at /signup')
         const { email, password, firstname, lastname } = req.body
         const defaultUsername = email.split("@")[0]
-        getAvailableUsername(defaultUsername).
-            then(username => { 
+        // check if such user exists with the email
+        
+        getAvailableUsername(defaultUsername)
+            .then(username => { 
                 console.log("username is: " + username)
-                return createUser(email, password, username, firstname, lastname) }).
-            then((err, user) => {
-                // err handling done in the following catch statement....?
+                
+                return createUser(email.toLowerCase(), password, username, firstname, lastname) 
+            })
+            .then((err, user) => {
+                // why is error object passed as the first argument from createUser promise
+                // when it isn't in config/passport.js?
+                // TODO add error handling
                 console.log('at createUser callback')
                 console.log(user)
                 authenticateSignin(passport, req, res, next)
-            }).
-            catch(err => { next(err) })       
+            })
+            .catch(err => {
+                if (err.name === 'ValidationError') {
+                    //const error = err.errors
+                    // for now just returning one of the errors..
+                    var errorMessages = []
+                    for (var field in err.errors) {
+                        const errMessage = err.errors[field].message
+                        console.log(errMessage)
+                        errorMessages.push(errMessage)
+                    }
+                    // just return one error message for now...
+                    res.status(401).json({error: errorMessages[0]})
+                }
+                else {
+                    next(err)                    
+                }
+            })       
     })
                 
         

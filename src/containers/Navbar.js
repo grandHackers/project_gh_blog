@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Actions from '../actions'
 import { Link } from 'react-router'
 import AppBar from 'material-ui/AppBar'
+import UserMenu from '../components/UserMenu'
 
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
@@ -12,14 +13,17 @@ import FlatButton from 'material-ui/FlatButton'
 import SignInModal from '../components/SignInModal'
 
 export class NavBar extends React.Component {
+   
     constructor(props, context) {
-        super(props);
+        super(props)
         context.router
+        
         this.loadAddPostForm = this.loadAddPostForm.bind(this)
-        this.showAddPostPageButton = this.showAddPostPageButton.bind(this)
         this.showActions = this.showActions.bind(this)
-        this.showUserMenu = this.showUserMenu.bind(this)
-        this.styles = {
+        this.redirectToMain = this.redirectToMain.bind(this)
+        
+        const appBarStyle = context.muiTheme.appBar
+        this.style = {
             root: {   
                 position: "fixed",
                 top: 0
@@ -28,7 +32,11 @@ export class NavBar extends React.Component {
                 cursor: 'pointer'
             },
             button: {
-                color: 'white'
+                height: appBarStyle.height,
+                lineHeight: appBarStyle.height + 'px',
+                color: appBarStyle.textColor,
+                fontSize: '14px',
+                fontWeight: '500'
             }
         }
     }
@@ -41,64 +49,37 @@ export class NavBar extends React.Component {
 
 
     showActions() {
-        if (!this.props.currentUser.username) {
+        const { currentUsername } = this.props
+        
+        if (!currentUsername) { // if not logged in
             return <SignInModal />              
-        } else {
-            return [
-                <span>{`Hi, ${this.props.currentUser.username}`}</span>,
-                this.showAddPostPageButton(), 
-                this.showUserMenu()]
         }
+        
+        return [           
+            <FlatButton
+                className='nav-item'
+                label="Write a story"
+                style={this.style.button}
+                onClick={this.loadAddPostForm}/>,            
+            <UserMenu currentUsername={currentUsername} /> 
+        ]
+        
     }
-
-    showAddPostPageButton() {
-        // TODO need to get the current route name
-        // and render the add post page button if current route is at the index
-        var button;
-        if (!!this.props.currentUser.username) {
-            button = (
-                <FlatButton
-                    label="Write a story"
-                    style={this.styles.button}
-                    onClick={this.loadAddPostForm}/>)            
+  
+    redirectToMain() {
+        if (!this.props.currentUsername) {
+            this.context.router.push('/')
+        } else {
+            this.context.router.push(`/@${this.props.currentUsername}`)
         }
-        return button
-    }    
-    
-    showUserMenu() {
-        const handleSignOut = () => { 
-            console.log('Clicked on sign out!')
-            this.props.signOut()
-            
-            const path = '/' 
-            this.context.router.push(path)
-        }
-        const loadSettings = () => {
-            const path = '/me/settings'
-            this.context.router.push(path)
-        }
-        return (
-            <IconMenu
-                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-            >         
-                <MenuItem 
-                    primaryText="Settings" 
-                    onClick={loadSettings}
-                />
-                <MenuItem primaryText="Sign out" 
-                   onClick={handleSignOut}
-                />            
-            </IconMenu>
-        )
     }
     
     render() { 
         return (
             <AppBar
-               style={this.styles.root}
-               title={<span style={this.styles.title}> SimpleBlog </span>}
+               style={this.style.root}
+               title={<span style={this.style.title}> SimpleBlog </span>}
+               onTitleTouchTap={this.redirectToMain}
                showMenuIconButton={false}>
                {this.showActions()}
             </AppBar>
@@ -112,12 +93,13 @@ NavBar.PropTypes = {
 }
 
 NavBar.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.currentUser
+    currentUsername: state.currentUser.username
   }
 }
 

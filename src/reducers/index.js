@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 import Actions from '../actions'
 
 function filterPosts(postState, deleteId) {
@@ -57,8 +58,9 @@ export const currentUser = ( state = {}, action ) => {
 }
 
 const rootReducer = combineReducers({
+    currentUser,
     posts,
-    currentUser
+    form: formReducer,
 })
 
 export default rootReducer

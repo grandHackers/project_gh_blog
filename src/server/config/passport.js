@@ -40,8 +40,6 @@ function configurePassport(passport) {
     // =========================================================================
     // LOCAL LOGIN + SIGNUP ====================================================
     // =========================================================================
-        // TODO take out username from the user
-        // instead authenticate using email    
     passport.use(
         'local-login', new LocalStrategy({
             usernameField: 'email',
@@ -50,14 +48,15 @@ function configurePassport(passport) {
          },
             function(req, username, password, done) {
                 const email = username 
-                getUserByEmail(email).then((user) => {
+                getUserByEmail(email).then(user => {
                     console.log('authenticating. user: ' + user)
-                    if (!user) { return done(null, false) }
+                    if (!user) {
+                        return done(null, false, { message: 'Incorrect email.' }) 
+                    }
                     if (!user.verifyPassword(password)) {
-                        return done(null, false) 
+                        return done(null, false, { message: 'Incorrect password.' }) 
                     }
                     const userData = getFilteredUserData(user)
-                    ////console.log('after filtering: ' + JSON.stringify(userData))
                     return done(null, userData)
                 }).catch(err => { done(err) })
             }
@@ -82,18 +81,20 @@ function configurePassport(passport) {
                     if (!!user) { 
                         return done(null, user)
                     } else {
-                        return getAvailableUsername(defaultUsername).
-                            then(username => createUser(
+                        return getAvailableUsername(defaultUsername)
+                            .then(username => createUser(
                                     profile.emails[0].value, 
                                     null, 
                                     username,
                                     profile.name.givenName,
                                     profile.name.familyName,
-                                    profile.id)).
-                            then((user) => { // if user is created
+                                    profile.id))
+                            .then((user) => { // if user is created
                                 console.log('after createUser') 
                                 console.log(user)
-                                if (user) { return done(null, user)}      
+                                if (user) { 
+                                    return done(null, user)
+                                }      
                             })                                
                     } 
                 }).catch(err => {

@@ -7,11 +7,8 @@ import SignInForm from '../containers/SignInForm'
 import SignUpForm from '../containers/SignUpForm'
 
 
-// TODO
-// change to proper redux form
-
 export default class SignInModal extends Component {
-    constructor(props) {
+    constructor(props, context) {
         super(props)
         this.state = {
             open: false,
@@ -56,7 +53,12 @@ export default class SignInModal extends Component {
     
     
     render() {
-        const buttonStyle = { color: 'white' }
+        const signinStyle = {
+            color:'white',
+            height: this.context.muiTheme.appBar.height,
+            lineHeight: this.context.muiTheme.appBar.height + 'px'          
+        }
+        
         const actions = [
             <FlatButton 
                 label="Cancel (Or Press ESC key)"
@@ -64,14 +66,13 @@ export default class SignInModal extends Component {
                 onClick={this.closeDialog}
             />             
         ] 
-        console.log("at signinmodal render")
         return (
             <div id='sign-in'>
                 <FlatButton 
                     label="Sign in / Sign up"
                     primary={true}
                     onClick={this.openDialog}
-                    style={buttonStyle}
+                    style={signinStyle}
                 />                
                 <Dialog
                     title={this.state.title}
@@ -86,4 +87,8 @@ export default class SignInModal extends Component {
             </div>
         )    
     }
+}
+
+SignInModal.contextTypes = {
+    muiTheme: PropTypes.object.isRequired
 }

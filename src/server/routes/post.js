@@ -10,7 +10,6 @@ import {
  } from '../api/post';
 import { isLoggedIn } from './auth'
 var router = express.Router()
-var logger = require('winston')
 
 function isAuthorized(req, res, next) {
     console.log('inside isAuthorized for post access')

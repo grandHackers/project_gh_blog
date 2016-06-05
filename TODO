@@ -31,15 +31,37 @@ Process:
 - add remove post functionality --> DONE
 - rename subdir_url --> basename (DONE) 
 - add validation for:
-	+ login
-	+ signup
-	+ post fetching
+	(let's just use redux form for most forms)
+	+ login DONE
+	+ signup DONE
+	( redux form ? async validation ) - YES
+
+- 	validation / error handling for (Not done)
+	+ post fetching -
 	+ post creation
 	+ post edit
 	+ post removal
-	( redux form ? async validation )
+
 - refactor code * (TBD)
-- fix CSS (seriously.)
+- last authorization step:
+	do not allow user to access the edit post page if not owner (hide edit link)
+	do not allow user to delete the card if not owner (hide delete mark)
+- fix styling
+
+- navbar:
+	- all the children should be at the same position as the title in the navbar..
+	- the vert icon should be white (consider modifying the theme?)
+- feed background should cover the area between the navbar and footer
+- footer not sticking to the bottom
+- feed item card 
+	reduce size 
+	delete button should be at the upper right corner of the card 
+
+		
+		
+		   	
+   
+
 - (make sure to also edit SUBDIR_URL to BASE_URL accordingly in project_gh_env)
 
 
@@ -48,7 +70,7 @@ Stuff to consider doing (learned from Real World Example):
 - change string concatenation syntax to ES6 one (ex: fullName + " is cool " --> `${fullName} is cool`)
 - make a custom middleware for handling api calls. so no action creator will actually be individually making api calls, it will just return some action type that is to be interpreted by the middleware. (actually this is really only useful if we are making several api calls to different resources??? - TBD)
 [
-State:
+State in Real World Example:
 
 entities: // original resource representation returned by the api? or something like that
 	users // user cache

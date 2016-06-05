@@ -54,15 +54,22 @@ app.use(passport.session()) // persistent login sessions
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
-
 configurePassport(passport)
 addAuthRoutes(app, passport)
 
 // Mount API routers
-// TODO remove users routes! They shouldn't be exposed.
-// also make sure to instantiate all models before mounting them. (Right now logic is all mingled up)
 app.use('/api/users', users) 
 app.use('/api/posts', posts)
+
+function errorHandler(err, req, res, next) {
+    if (res.headersSent) {
+        return next(err)
+    }
+    res.status(500)
+    res.json({error: err})
+}
+
+app.use(errorHandler)
 
 // Serve HTML
 app.get('*', (req, res, next) => {

@@ -7,9 +7,11 @@ export const RECEIVE_SESSION_STATUS = 'RECEIVE_SESSION_STATUS'
 
 export const REQUEST_SIGN_IN = 'REQUEST_SIGN_IN'
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
+export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE'
 
 export const REQUEST_SIGN_UP = 'REQUEST_SIGN_UP'
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE'
 
 export const REQUEST_SIGN_OUT = 'REQUEST_SIGN_OUT'
 export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
@@ -38,7 +40,9 @@ export function checkSessionStatus() {
 }
 
 function requestSignUp() {
-    return { type: REQUEST_SIGN_UP }
+    return { 
+        type: REQUEST_SIGN_UP
+    }
 }
 
 function signUpSuccess(user) {
@@ -48,26 +52,35 @@ function signUpSuccess(user) {
     }
 }
 
+function signUpFailure() {
+    return {
+        type: SIGN_UP_FAILURE
+    }   
+}
+
+// TODO refactor
 export function signUp(email, password, firstname, lastname, router) {
-    // for local signup
+    // for local signin
     const url = config.BASE_URL + '/signup'
-    const data = {email, password, firstname, lastname}
-    const requestConfig = generatePostRequestConfig(data)
+    const payload = {email, password, firstname, lastname}
+    const requestConfig = generatePostRequestConfig(payload)
+        
     return (dispatch) => {
         dispatch(requestSignUp())
-        return fetch(url, requestConfig)
-            .then(response => {
-                if (response.statusCode != 401) {
-                    return response.json()                   
+        return fetch(url, requestConfig)        
+            .then(response => response.json())
+            .then(data => {
+                // we expect to get error field when error occurs
+                // change server side code accordingly
+                if (!data.error) {
+                    dispatch(signUpSuccess(data))
+                    router.push("/@" + data.username)
                 } else {
-                    throw "Failed login!"
-                }                
+                    const errorText = data.error
+                    dispatch(signUpFailure())
+                    return Promise.reject(errorText)
+                }
             })
-            .then(userData => {
-                dispatch(signUpSuccess(userData))
-                router.push("/@" + userData.username)
-            })
-            .catch(err => console.log(err)) 
     }
 }
 
@@ -86,26 +99,35 @@ function signInSuccess(user) {
     }   
 }
 
+function signInFailure(user) {
+    return {
+        type: SIGN_IN_FAILURE,
+        user
+    }   
+}
+
+
 export function signIn(email, password, router) {
     // for local signin
     return (dispatch) => {
         dispatch(requestSignIn(email))
-        const data = {email, password} 
+        const data = {email, password}
+        var url = config.BASE_URL + "/signin"
         const requestConfig = generatePostRequestConfig(data)
-        return fetch(config.BASE_URL + "/signin", requestConfig)
-            .then(response => {
-                if (response.statusCode != 401) {
-                    return response.json()                   
+        return fetch(url, requestConfig)        
+            .then(response => response.json())
+            .then(data => {
+                // we expect to get error field when error occurs
+                // change server side code accordingly
+                if (!data.error) {
+                    dispatch(signInSuccess(data))
+                    router.push("/@" + data.username)
                 } else {
-                    throw "Failed login!"
-                }                
+                    const errorText = data.error
+                    dispatch(signInFailure)
+                    return Promise.reject(errorText)
+                }
             })
-            .then(userData => {
-                dispatch(signInSuccess(userData))
-                console.log(router)
-                router.push("/@" + userData.username)
-            })
-            .catch(err => console.log(err))          
     }
 }
 

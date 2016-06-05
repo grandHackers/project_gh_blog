@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Navbar from './Navbar'
 import Footer from '../components/Footer'
 import Feed from './Feed'
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
+import baseTheme from '../theme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-const theme = getMuiTheme(lightBaseTheme)
+const theme = getMuiTheme(baseTheme)
 
 export class Main extends React.Component {
+    getChildContext() {
+        return {muiTheme: theme}    
+    }
+    
     constructor(props) {
         super(props)
     }
@@ -27,6 +31,10 @@ export class Main extends React.Component {
             </MuiThemeProvider>
         );
     }
+}
+
+Main.childContextTypes = {
+    muiTheme: PropTypes.object.isRequired
 }
 
 

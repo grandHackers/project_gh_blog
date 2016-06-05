@@ -30,6 +30,13 @@ export class EditPostForm extends Component {
         }
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+    
+    componentWillMount() {
+        if (!this.props.currentUsername) {
+            // TODO show error instead?
+            this.context.router.push('/')
+        }
+    }    
 
     handleSubmit(event) {
         event.preventDefault()       
@@ -40,7 +47,7 @@ export class EditPostForm extends Component {
             console.log("Editing Post")             
             this.props.editPost(this.props.params.postId, title, content)
             console.log("Going back to main feed page")
-            const path = '/@' + this.props.currentUser.username
+            const path = '/@' + this.props.currentUsername
             this.context.router.push(path)            
         }
         else {
@@ -98,7 +105,7 @@ const mapStateToProps = (state, ownProps) => {
   const post = state.posts.find((somePost) => 
     somePost.id == postId)
   return {
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     originalTitle: post.title,
     originalContent: post.content
   }

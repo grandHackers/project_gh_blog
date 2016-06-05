@@ -31,6 +31,13 @@ export class AddPostForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
+    componentWillMount() {
+        if (!this.props.currentUsername) {
+            // TODO show error instead?
+            this.context.router.push('/')
+        }
+    }
+
     handleSubmit(event) {
         event.preventDefault()       
         const title = this.refs.title.getValue()
@@ -40,7 +47,7 @@ export class AddPostForm extends Component {
             console.log("Adding New Post")             
             this.props.addNewPost(title, content)
             console.log("Going back to main feed page")
-            const path = '/@' + this.props.currentUser.username
+            const path = '/@' + this.props.currentUsername
             this.context.router.push(path)            
         }
         else {
@@ -90,7 +97,7 @@ AddPostForm.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.currentUser
+    currentUsername: state.currentUser.username
   }
 }
 

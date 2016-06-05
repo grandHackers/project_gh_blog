@@ -1,97 +1,102 @@
-import { connect } from 'react-redux'
-import Actions from '../actions'
 import React, { Component, PropTypes } from 'react'
+import { reduxForm } from 'redux-form'
+import Actions from '../actions'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+
+const renderError = (field) => { // TODO MOVE ME TO UTILS
+    return (field.touched && field.error && 
+            <div>{field.error}</div>) 
+}
+
+const style = {
+    input: {
+        display: 'block',
+        width: '50%',
+        margin: 'auto',
+        fontSize: '32px',
+        fontWeight: 'bold',  
+    },
+    button: {
+        display: 'block',
+        width: '15%',
+        margin: 'auto',
+    }
+}
+
+const validate = values => {
+    var errors = {}
+    if (!values.email) {
+        errors.email = 'Required'
+    } 
+    if (!values.password) {
+        errors.password = 'Required'
+    }
+    return errors
+}
 
 export class SignInForm extends Component {
     constructor(props, context) {
         super(props)
         context.router
-        this.style = {
-            input: {
-                display: 'block',
-                width: '50%',
-                margin: 'auto',
-                fontSize: '32px',
-                fontWeight: 'bold',  
-            },
-            button: {
-              display: 'block',
-              width: '15%',
-              margin: 'auto',
-            }
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
     }
     
+    onSubmit(values, dispatch) {
+        const { email, password } = values
+        return dispatch(Actions.signIn(email, password, this.context.router))
+            .catch((errorText) => {
+                console.error("Form: failing sign in")
+                return Promise.reject({_error: errorText})
+            })        
+    }
 
-    handleSubmit(event) {
-        event.preventDefault()       
-        const email = this.refs.email.getValue()
-        const password = this.refs.password.getValue() 
-        
-        if (email && password) {
-            console.log("Clicking signin")             
-            this.props.signIn(email, password, this.context.router)
-        }
-        else {
-            alert('Must provide both email and password.')
-        }
+    
+    render() {
+        const {fields: {email, password}, error,
+               handleSubmit, submitting } = this.props
+        return (
+            <form>
+                <TextField 
+                    hintText="email"
+                    ref='email'
+                    style={style.input}
+                    {...email}
+                    />
+                {renderError(email)}
+                <br />
+                
+                <TextField 
+                    hintText="password"
+                    ref='password'
+                    style={style.input}
+                    {...password}
+                    />
+                {renderError(password)}
+                <br />
+                
+                {error && <div>{error}</div>} 
+                <RaisedButton 
+                    label="SignIn" 
+                    primary={true} 
+                    style={style.button} 
+                    ref='submitButton'
+                    onClick={handleSubmit(this.onSubmit)}
+                    disabled={submitting}
+                >
+                </RaisedButton>                             
+            </form>
+        )
         
     }
-        
-    render() {
-        return (           
-            <div id='add-post-form'> 
-            {/* change id=add-post-form to some class=sign-in-form and apply styling */}
-                <form>
-                    <TextField 
-                        hintText="email"
-                        ref='email'
-                        style={this.style.input}/>
-                    <br />
-                    <TextField 
-                        hintText="Password"
-                        ref='password'
-                        style={this.style.input}/>
-                    <br />               
-                    <RaisedButton 
-                        label="SignIn" 
-                        primary={true} 
-                        style={this.style.button} 
-                        ref='submitButton'
-                        onClick={this.handleSubmit}
-                    />
-                </form>
-            </div>
-        );
-    }    
-}
-
-SignInForm.PropTypes = {
-    signIn: PropTypes.func.isRequired, 
-}
+} 
 
 SignInForm.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return {
-    currentUser: state.currentUser
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signIn: (email, password, router) => {
-        dispatch(Actions.signIn(email, password, router))
-    }
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignInForm)
+export default reduxForm({
+    form: 'SignIn',
+    fields: ['email', 'password'],
+    validate, 
+})(SignInForm)
