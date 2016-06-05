@@ -14,7 +14,7 @@ export class Feed extends Component {
         
     render() {
         const feedItems = this.props.posts.map( 
-            item => <FeedItem {...item} /> )
+            item => <FeedItem {...item} currentUsername={this.props.currentUsername} /> )
         return (
                 <div className='feed'> 
                     {feedItems} 
@@ -31,7 +31,8 @@ Feed.PropTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    posts: state.posts
+    posts: state.posts,
+    currentUsername: state.currentUser.username
   }
 }
 

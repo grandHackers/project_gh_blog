@@ -4,11 +4,6 @@ import Actions from '../actions'
 import { Link } from 'react-router'
 import AppBar from 'material-ui/AppBar'
 import UserMenu from '../components/UserMenu'
-
-import IconMenu from 'material-ui/IconMenu'
-import MenuItem from 'material-ui/MenuItem'
-import IconButton from 'material-ui/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import FlatButton from 'material-ui/FlatButton'
 import SignInModal from '../components/SignInModal'
 

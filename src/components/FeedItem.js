@@ -5,7 +5,9 @@ import Card from 'material-ui/Card/Card'
 import CardHeader from 'material-ui/Card/CardHeader'
 import CardTitle from 'material-ui/Card/CardTitle'
 import CardText from 'material-ui/Card/CardText'
+import EditModeIcon from 'material-ui/svg-icons/editor/mode-edit'
 import DeletePostDialog from '../containers/DeletePostDialog'
+
 
 export default class FeedItem extends Component {
     constructor(props) {
@@ -14,14 +16,30 @@ export default class FeedItem extends Component {
             root: {
                 width: '65%',
                 margin: 'auto',
-                marginBottom: '20px'                 
+                marginBottom: '20px' 
+            },
+            action: {
+                float: 'right'
             }
+        }
+        this.showActionsIfSignedIn = this.showActionsIfOwner.bind(this)
+    }
+    
+    showActionsIfOwner() {
+        const {currentUsername, owner, id} = this.props
+        if (currentUsername === owner) {
+            return [
+                 <DeletePostDialog postId={id} />,
+                 <Link to={`/@${owner}/${id}/editPost`} >
+                    <EditModeIcon style={this.style.action} />  
+                 </Link>
+            ]
         }
     }
     
     render() {
         const { owner, created_at, updated_at,
-                id, title, content } = this.props
+                title, content } = this.props
         return (
             <Card 
                 className='feed-item-card'
@@ -32,13 +50,11 @@ export default class FeedItem extends Component {
                     title={owner} 
                     subtitle={updated_at || created_at}
                  >
-                 <DeletePostDialog postId={id} />
+                {this.showActionsIfOwner()}
                  </CardHeader>
-                <Link to={`/@${owner}/${id}/editPost`} >
-                    <CardTitle 
-                        className='feed-item-card-title' 
-                        title={title}/>                    
-                </Link>
+                 <CardTitle 
+                    className='feed-item-card-title' 
+                    title={title}/>
                 <CardText> {content} </CardText>
             </Card>
         )
@@ -53,4 +69,5 @@ FeedItem.PropTypes = {
     content: PropTypes.string.isRequired,
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
+    currentUsername: PropTypes.string
 }
