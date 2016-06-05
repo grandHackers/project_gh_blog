@@ -61,7 +61,7 @@ export class NavBar extends React.Component {
                 label="Write a story"
                 style={this.style.button}
                 onClick={this.loadAddPostForm}/>,            
-            <UserMenu currentUsername={currentUsername} /> 
+            <UserMenu currentUsername={currentUsername} signOut={this.props.signOut} /> 
         ]
         
     }
