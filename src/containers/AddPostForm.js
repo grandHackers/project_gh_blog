@@ -1,31 +1,40 @@
 import { connect } from 'react-redux'
 import Actions from '../actions'
 import React, { Component, PropTypes } from 'react'
+import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+
+// TODO refactor the style 
+// it is exactly the same as the edit post form style
+
+const baseStyle = {
+    paper: {
+        width: '75%',
+        margin: 'auto'
+    },
+    input: {
+        display: 'block',
+        width: '90%',
+        margin: 'auto'
+    }   
+}
 
 export class AddPostForm extends Component {
     constructor(props, context) {
         super(props)
         context.router
         this.style = {
-            titleInput: {
-                display: 'block',
-                width: '50%',
-                margin: 'auto',
+            paper: baseStyle.paper,
+            titleInput: Object.assign({
                 fontSize: '32px',
-                fontWeight: 'bold',  
-            },
-            contentInput: {
-                display: 'block',
-                width: '50%',
-                margin: 'auto'
-            },
+                fontWeight: 'bold'    
+            }, baseStyle.input),
+            contentInput: baseStyle.input,
             button: {
               display: 'block',
               width: '10%',
               margin: 'auto',
-                
             }
         }
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -58,30 +67,32 @@ export class AddPostForm extends Component {
         
     render() {
         return (
-            <div id='add-post-form'>
-                <form action="" onSubmit={this.handleSubmit}>
-                    <TextField 
-                        hintText="Title"
-                        ref='title'
-                        style={this.style.titleInput}/>
-                    <br />
-                    <TextField
-                        name='content'
-                        floatingLabelText="Write your story here..."
-                        multiLine={true}
-                        rows={10}
-                        ref='content'
-                        style={this.style.contentInput}
+            <div className='post-form-wrapper'>
+                <Paper style={this.style.paper} zDepth={1}>
+                    <form className='post-form' action="" onSubmit={this.handleSubmit}>
+                        <TextField 
+                            hintText="Title"
+                            ref='title'
+                            style={this.style.titleInput}/>
+                        <br />
+                        <TextField
+                            name='content'
+                            floatingLabelText="Write your story here..."
+                            multiLine={true}
+                            rows={10}
+                            ref='content'
+                            style={this.style.contentInput}
+                            />
+                        <br />                
+                        <RaisedButton 
+                            label="Publish" 
+                            primary={true} 
+                            style={this.style.button} 
+                            ref='submitButton'
+                            onClick={this.handleSubmit}
                         />
-                    <br />                
-                    <RaisedButton 
-                        label="Publish" 
-                        primary={true} 
-                        style={this.style.button} 
-                        ref='submitButton'
-                        onClick={this.handleSubmit}
-                    />
-                </form>
+                    </form>
+                </Paper>
             </div>           
         );
     }    

@@ -47,6 +47,7 @@ export class DeletePostDialog extends Component {
         ]
         return (
             <IconButton
+                style={{float: 'right'}}
                 onClick={this.handleOpen}> 
                 <NavigationClose />
                 <Dialog

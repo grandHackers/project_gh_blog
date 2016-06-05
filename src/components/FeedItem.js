@@ -9,14 +9,24 @@ import DeletePostDialog from '../containers/DeletePostDialog'
 
 export default class FeedItem extends Component {
     constructor(props) {
-        super(props);
+        super(props)
+        this.style = {
+            root: {
+                width: '65%',
+                margin: 'auto',
+                marginBottom: '20px'                 
+            }
+        }
     }
     
     render() {
         const { owner, created_at, updated_at,
                 id, title, content } = this.props
         return (
-            <Card className='feed-item-card'> 
+            <Card 
+                className='feed-item-card'
+                style={this.style.root}
+            > 
                 <CardHeader 
                     className='feed-item-card-header' 
                     title={owner} 

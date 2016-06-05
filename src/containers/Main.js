@@ -23,8 +23,10 @@ export class Main extends React.Component {
             <MuiThemeProvider muiTheme={theme}>            
                 <div>
                     <Navbar />
-                    <div id='content'>
-                        {this.props.children}
+                    <div id='container'>
+                        <div id='content-wrapper'>
+                            {this.props.children}
+                        </div>
                     </div>
                     <Footer />
                 </div>
