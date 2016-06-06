@@ -99,10 +99,9 @@ function signInSuccess(user) {
     }   
 }
 
-function signInFailure(user) {
+function signInFailure() {
     return {
-        type: SIGN_IN_FAILURE,
-        user
+        type: SIGN_IN_FAILURE
     }   
 }
 
@@ -117,6 +116,7 @@ export function signIn(email, password, router) {
         return fetch(url, requestConfig)        
             .then(response => response.json())
             .then(data => {
+                // Note: (This is subject to change)
                 // we expect to get error field when error occurs
                 // change server side code accordingly
                 if (!data.error) {
@@ -124,7 +124,7 @@ export function signIn(email, password, router) {
                     router.push("/@" + data.username)
                 } else {
                     const errorText = data.error
-                    dispatch(signInFailure)
+                    dispatch(signInFailure())
                     return Promise.reject(errorText)
                 }
             })

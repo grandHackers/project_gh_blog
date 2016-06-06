@@ -61,16 +61,24 @@ function receiveCreatedPost(data) {
 export function createPost(title, content) {
     // For now assuming that user is creating a post
     // only on their own blog, so not doing any validation here.
-    return function (dispatch, getState) {
-        const state = getState()
+    return (dispatch, getState) => {
         var payload = { title, content }
-        const requestConfig = generatePostRequestConfig(payload)
         dispatch(requestCreatePost(payload))
-        return fetch(config.API_URL + '/posts/', requestConfig)
+        //const requestConfig = generatePostRequestConfig(payload)
+        return callApi('/posts', 'POST', payload)
           .then(response => response.json())
-          .then(data => 
-                dispatch(receiveCreatedPost(data)))
-          .catch(error => console.log(error)) 
+          .then(data => { 
+                // Note: (This is subject to change)
+                // we expect to get error field when error occurs
+                // change server side code accordingly          
+                if (!data.error) {
+                    dispatch(receiveCreatedPost(data))
+                    return Promise.resolve()                    
+                } else {
+                    const errorText = data.error
+                    return Promise.reject(errorText)
+                } 
+        }) 
     }
 }
 
@@ -100,22 +108,29 @@ function editPostFailure() {
     }
 }
 
-//
 export function editPost(postId, title, content) {
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         var payload = { title, content }
         dispatch(requestEditPost(postId, title, content))
-        callApi(`/posts/${postId}`, 'PUT', payload)
+        return callApi(`/posts/${postId}`, 'PUT', payload)
             .then(response => {
-                if (response.status >= 400) {
-                    return Promise.reject()
-                } else {
+                debugger;
+                if (response.ok) {
                     return response.json()
+                } else {
+                    return Promise.reject(response.json())
                 }
             })
-            .then(data => dispatch(editPostSuccess(data)),
-                  () => dispatch(editPostFailure()))
-            .catch(error => {console.error(error)})
+            .then(data => {
+                dispatch(editPostSuccess(data))
+                return Promise.resolve(data)       
+            })
+            .catch(errData => {
+                dispatch(editPostFailure())
+                const errText = errData.error
+                console.log(errText) 
+                return Promise.reject(errText)                
+            })
     }
 }
 
@@ -160,5 +175,19 @@ export function deletePost(postId) {
                 }
             })
             .catch(error => console.error(error))
+    }
+}
+
+export function getPost(postId) {
+    // TODO add request, success, and failure action types!
+    return function (dispatch, getState) {
+        callApi(`/posts/${postId}`, 'GET')
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else { 
+                    return Promise.reject(response.statusText)
+                }
+            })
     }
 }

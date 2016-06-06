@@ -1,108 +1,95 @@
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Actions from '../actions'
-import React, { Component, PropTypes } from 'react'
-import Paper from 'material-ui/Paper'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
-
-// TODO refactor the style 
-// it is exactly the same as the add post form style
-
-const baseStyle = {
-    paper: {
-        width: '75%',
-        margin: 'auto'
-    },
-    input: {
-        display: 'block',
-        width: '90%',
-        margin: 'auto'
-    }   
-}
+import PostPublishForm from './PostPublishForm'
 
 export class EditPostForm extends Component {
     constructor(props, context) {
         super(props)
         context.router
-        this.style = {
-            paper: baseStyle.paper,
-            titleInput: Object.assign({
-                fontSize: '32px',
-                fontWeight: 'bold'    
-            }, baseStyle.input),
-            contentInput: baseStyle.input,
-            button: {
-              display: 'block',
-              width: '10%',
-              margin: 'auto',
-            }
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
+        this.postId = this.props.params.postId
+        this.post = this.props.post
     }
     
+    onSubmit(values, dispatch) {
+        const { title, content } = values
+        return dispatch(Actions.editPost(this.postId, title, content))
+            .then(() => {
+                console.log("Going back to my feed page...")
+                const path = '/@' + this.props.currentUsername
+                this.context.router.push(path)           
+            })
+            .catch(errorText => {
+                console.error("Form: failing post edit...: " + errorText)
+                return Promise.reject({_error: errorText})
+            })
+    }
+
     componentWillMount() {
-        if (!this.props.currentUsername) {
-            // TODO show error instead?
+        // currently the 'post' prop is passed from state.posts
+        // if this doesn't exist, it means user just entered in the url
+        // without following the ui or if user has refreshed the page
+        // TODO show an unauthorized error page instead of console logging
+        // and redirection
+        const { currentUsername, post, postId } = this.props
+        if (!currentUsername) { // user not logged in
+            console.error('user not logged in!')
             this.context.router.push('/')
         }
-    }    
-
-    handleSubmit(event) {
-        event.preventDefault()       
-        const title = this.refs.title.getValue()
-        const content = this.refs.content.getValue() 
-        
-        if (title && content) {
-            console.log("Editing Post")             
-            this.props.editPost(this.props.params.postId, title, content)
-            console.log("Going back to main feed page")
-            const path = '/@' + this.props.currentUsername
-            this.context.router.push(path)            
+        else if (currentUsername && !post) { // user logged in but post info not in cache
+            // server call to get post and check its owner
+            console.log("user logged in but can't find this post in state")
+            Action.getPost(postId)
+                .then(post => { 
+                    if (post.owner === currentUsername) {
+                        this.post = post
+                    } else {
+                        Promise.reject("User is unauthorized to edit another's post")    
+                    }
+                })
+                .catch(err => { 
+                    console.error('unauthorized - unauthenticated: ' + err)
+                    this.context.router.push('/') 
+                })
+            
+        } else if (currentUsername !== post.owner) {
+            // user logged in and post info in cache
+            // but this post doesn't belong to the user
+            // TODO show an unauthorized error page instead
+            console.error('user logged in but unauthorized to edit this post!')
+            this.context.router.push('/')
+        } else {
+            console.log(this.post)
         }
-        else {
-            alert('Must provide both title and content.')
-        }
-        
     }
         
     render() {
+        console.log('printing post publish form')
+        console.log(this.post)
+        // even when there's supposed to be "redirection" from react router
+        // during componentWillMount
+        // render gets called first for some reason
+        // so this is to prevent any errors from occurring
+        var initialValues;
+        if (this.post) {
+            initialValues = {
+                title: this.post.title,
+                content: this.post.content
+            }
+        }
         return (
-            <div className='post-form-wrapper'>
-                 <Paper style={this.style.paper} zDepth={1}>
-                    <form className='post-form' onSubmit={this.handleSubmit}>
-                        <TextField 
-                            hintText="Title"
-                            ref='title'
-                            style={this.style.titleInput}
-                            defaultValue={this.props.originalTitle}
-                        />
-                        <br />
-                        <TextField
-                            name='content'
-                            floatingLabelText="Write your story here..."
-                            multiLine={true}
-                            rows={10}
-                            ref='content'
-                            style={this.style.contentInput}
-                            defaultValue={this.props.originalContent}
-                            />
-                        <br />                
-                        <RaisedButton 
-                            label="Publish" 
-                            primary={true} 
-                            style={this.style.button} 
-                            ref='submitButton'
-                            onClick={this.handleSubmit}
-                        />
-                    </form>
-                </Paper>
-            </div>           
-        );
-    }    
+            <PostPublishForm
+                onPublish={this.onSubmit}
+                initialValues={initialValues}
+            />
+        )
+    }     
 }
 
 EditPostForm.PropTypes = {
-    editPost: PropTypes.func.isRequired, 
+    currentUsername: PropTypes.string.isRequired,
+    post: PropTypes.object
 }
 
 EditPostForm.contextTypes = {
@@ -113,24 +100,13 @@ const mapStateToProps = (state, ownProps) => {
   const { postId } = ownProps.params
   // TODO in reducer
   // group posts by users
-  const post = state.posts.find((somePost) => 
-    somePost.id == postId)
-  return {
-    currentUsername: state.currentUser.username,
-    originalTitle: post.title,
-    originalContent: post.content
-  }
-}
 
-const mapDispatchToProps = (dispatch) => {
   return {
-    editPost: (postId, title, content) => {
-        dispatch(Actions.editPost(postId, title, content))
-    }
+    post: state.posts.find(somePost => somePost.id == postId),      
+    currentUsername: state.currentUser.username,
   }
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(EditPostForm)

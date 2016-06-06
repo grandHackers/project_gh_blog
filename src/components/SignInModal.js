@@ -61,7 +61,7 @@ export default class SignInModal extends Component {
         
         const actions = [
             <FlatButton 
-                label="Cancel (Or Press ESC key)"
+                label="Cancel"
                 primary={true}
                 onClick={this.closeDialog}
             />             

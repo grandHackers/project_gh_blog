@@ -3,11 +3,7 @@ import { reduxForm } from 'redux-form'
 import Actions from '../actions'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-
-const renderError = (field) => { // TODO MOVE ME TO UTILS
-    return (field.touched && field.error && 
-            <div>{field.error}</div>) 
-}
+import { renderError } from '../utils/validator'
 
 const style = {
     input: {
@@ -61,18 +57,18 @@ export class SignInForm extends Component {
                     hintText="email"
                     ref='email'
                     style={style.input}
+                    errorText={renderError(email)}
                     {...email}
                     />
-                {renderError(email)}
                 <br />
                 
                 <TextField 
                     hintText="password"
                     ref='password'
                     style={style.input}
+                    errorText={renderError(password)}
                     {...password}
                     />
-                {renderError(password)}
                 <br />
                 
                 {error && <div>{error}</div>} 

@@ -12,8 +12,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 const fieldNames = ['email', 'password', 'firstname', 'lastname']
 
 const renderError = (field) => { // TODO MOVE ME TO UTILS
-    return (field.touched && field.error && 
-            <div>{field.error}</div>) 
+    if (field.touched && field.error) {
+        return field.error    
+    }
 }
 
 const style = { // TODO refactor me to somewhere else
@@ -87,37 +88,38 @@ export class SignUpForm extends Component {
                     hintText="email"
                     ref='email'
                     style={style.input}
+                    errorText={renderError(email)}
                     {...email}
                     />
-                {renderError(email)}
+                
                 <br />
                 
                 <TextField 
                     hintText="password"
                     ref='password'
                     style={style.input}
+                    errorText={renderError(password)}
                     {...password}
                     />
-                {renderError(password)}
                 <br />
                 
                 <TextField 
                     hintText="first name"
                     ref='firstname'
                     style={style.input}
+                    errorText={renderError(firstname)}
                     {...firstname}
                     />
                 <br />
-                {renderError(firstname)}
                 
                 <TextField 
                     hintText="last name"
                     ref='lastname'
                     style={style.input}
+                    errorText={renderError(lastname)}
                     {...lastname}
                     />
                 <br />                  
-                {renderError(lastname)}
                 
                 {error && <div>{error}</div>} 
                 <RaisedButton 
