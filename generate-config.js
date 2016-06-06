@@ -8,7 +8,7 @@ const serverConfig = {
     DB_HOST:                    env.MONGO_PORT_27017_TCP_ADDR || env.DB_HOST || 'localhost',
     DB_PORT:                    env.DB_PORT || 27017, 
     DB_NAME:                    env.DB_NAME || 'blog',
-    BASE_URL:                 env.BASE_URL || '',
+    BASE_URL:                   env.BASE_URL || '',
     API_URL:                    env.API_URL || '/api',
 }
 

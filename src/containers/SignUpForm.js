@@ -99,6 +99,7 @@ export class SignUpForm extends Component {
                     ref='password'
                     style={style.input}
                     errorText={renderError(password)}
+                    type='password'
                     {...password}
                     />
                 <br />

@@ -67,6 +67,7 @@ export class SignInForm extends Component {
                     ref='password'
                     style={style.input}
                     errorText={renderError(password)}
+                    type='password'
                     {...password}
                     />
                 <br />
