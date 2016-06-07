@@ -161,7 +161,7 @@ Besides, the console prints noisy error messages, and it's misleading.
 - Write comprehensive comments
 - Take out noisy console logging 
 - styling - make edit and remove icons visible only when the mouse hovers on the card
-- test
+- update test code - it's completely broken now that so much code has changed.
 
  
 
