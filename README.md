@@ -27,7 +27,8 @@ This blog application currently supports the following features:
   * Sign out 
   * Edit username (More about this later)
 - Creation, modification, and removal of Blog Posts by the owner  
-- Viewing Blog Posts filtered by owner  
+- Viewing Blog Posts by owner:
+  * ex) To view blog posts by user 'elaine01', then enter: '<APP_URL>/@elaine01'. If you are trying on the live demo, it would be http://kicvm-netand02.cloudapp.net/gh/blog/@elaine01. 
 
 ## Stack
 Server-side:
