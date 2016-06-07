@@ -48,13 +48,6 @@ function validateEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
 
-// TODO add validation for unique username
-userSchema.plugin(findOrCreate)
-var User = mongoose.model('User', userSchema)
-export default User
-module.exports = User
-
-
 userSchema.methods.verifyPassword = function(password) {
     // TODO
     // later the password field will be hashed
@@ -64,8 +57,14 @@ userSchema.methods.verifyPassword = function(password) {
 }
 
 userSchema.path('email').validate(function(email, respond) {
-    User.find({email: email.toLowerCase()}, function (err, emails) {
+    mongoose.model('User').find({email: email.toLowerCase()}, function (err, emails) {
         if (err) { console.error('error occurred while checking for email uniqueness...') }
         respond(emails.length === 0)
     }) 
 }, "This email has already been registered.")
+
+
+export default mongoose.model('User', userSchema)
+
+
+

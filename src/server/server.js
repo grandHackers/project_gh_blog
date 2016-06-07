@@ -1,35 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import passport from 'passport'
-
 import session from 'express-session'
 import expressLess from 'express-less'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import flash from 'connect-flash'
-
 import path from 'path'
-import util from 'util'
-
+import connectToDB from './utils/mongoDBConnection'
 import config from '../../config/server-config.js'
-import configurePassport from './config/passport'
+import configurePassport from './passport'
 import addAuthRoutes from './routes/auth'
 import { users, posts } from './routes'
-
-var logger = require('winston')
-
-
-function connectToDB(host, port, dbName) {
-    try {
-        var mongoUrl = util.format("mongodb://%s:%s/%s", host, port, dbName)
-        var msg = logger.log('info', "Connecting to database at " + mongoUrl)
-        mongoose.connect(mongoUrl); 
-    } catch(err) {
-        // TODO implement better error handling
-        logger.log('error', 'Failed when trying to connect to database at ' + mongoUrl + ' : ' + err)
-        throw err
-    }
-}
 
 connectToDB(config.DB_HOST, config.DB_PORT, config.DB_NAME)
 mongoose.Promise = require('bluebird') 
@@ -39,7 +21,9 @@ app.use(cookieParser())
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
 
-// required for passport
+/** 
+ * Required for passportjs 
+ */ 
 app.use(session({ 
     secret: 'simpleblogey', 
     resave: false, 
@@ -50,14 +34,15 @@ app.use(session({
 app.use(flash()) // use connect-flash for flash messages stored in session
 app.use(passport.initialize())
 app.use(passport.session()) // persistent login sessions
-// Resources
 app.use("/", express.static( __dirname + "/../../public/"));
 app.use("/css", expressLess( __dirname + "/../less/", {debug:true}) );
 
 configurePassport(passport)
 addAuthRoutes(app, passport)
 
-// Mount API routers
+/** 
+ * Mount API routers 
+ */ 
 app.use('/api/users', users) 
 app.use('/api/posts', posts)
 
@@ -66,7 +51,7 @@ function errorHandler(err, req, res, next) {
         return next(err)
     }
     res.status(500)
-    res.json({error: err})
+    res.json({error: err.message})
 }
 
 app.use(errorHandler)
@@ -79,7 +64,7 @@ app.get('*', (req, res, next) => {
 });
 
 app.listen( config.APP_PORT , function() { 
-    logger.log('info', 'Listening on ' + config.APP_PORT + '...')    
+    console.log('Listening on ' + config.APP_PORT + '...')    
 });
 
 

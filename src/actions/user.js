@@ -31,7 +31,7 @@ export function updateUsername(newUsername) {
         dispatch(requestUpdateUsername(newUsername))
         
         const currentUser = getState().currentUser 
-        callApi(`/users/${currentUser.id}`, 'PUT', payload)
+        return callApi(`/users/${currentUser.id}`, 'PUT', payload)
             .then(response => {
                 if (response.status == 200) {
                     return response.json() 

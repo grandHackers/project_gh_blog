@@ -8,7 +8,7 @@ const serverConfig = {
     DB_HOST:                    env.MONGO_PORT_27017_TCP_ADDR || env.DB_HOST || 'localhost',
     DB_PORT:                    env.DB_PORT || 27017, 
     DB_NAME:                    env.DB_NAME || 'blog',
-    BASE_URL:                   env.BASE_URL || '',
+    BASE_URL:                   env.BASE_URL || '',  // this should not include '/' at the end. Currently code doesn't handle this case. TODO
     API_URL:                    env.API_URL || '/api',
 }
 
@@ -17,11 +17,12 @@ const clientConfig = {
     BASE_URL: serverConfig.BASE_URL
 }
 
+
 const authConfig = {
     google: {
-        clientID: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        callbackURL: env.GOOGLE_REDIRECT_URL
+        clientID: "129518142090-i4up2q55ovgbeqbpna88civjupftnbia.apps.googleusercontent.com", 
+        clientSecret: "KwN0JBJgW60ACmrTQEFtbPYt",
+        callbackURL: env.GOOGLE_REDIRECT_URL || "http://localhost" + serverConfig.BASE_URL + "/auth/google/callback"
     }
 }
 

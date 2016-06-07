@@ -75,6 +75,7 @@ export function signUp(email, password, firstname, lastname, router) {
                 if (!data.error) {
                     dispatch(signUpSuccess(data))
                     router.push("/@" + data.username)
+                    return Promise.resolve()
                 } else {
                     const errorText = data.error
                     dispatch(signUpFailure())

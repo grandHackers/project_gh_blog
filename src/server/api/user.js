@@ -11,9 +11,7 @@ export function getUserById(userId) {
         exec()
 }
 
-export function getUserByEmail(email) {
-    // TODO comment me!
-    // make sure to not give out password    
+export function getUserByEmail(email) {  
     return User.
         findOne({email}).
         exec()

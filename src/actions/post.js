@@ -9,9 +9,6 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const REQUEST_CREATE_POST = 'REQUEST_CREATE_POST'
 export const RECEIVE_CREATED_POST = 'RECEIVE_CREATED_POST'
 
-
-
-
 function requestGetPosts(ownerId) {
   return {
     type: REQUEST_GET_POSTS,

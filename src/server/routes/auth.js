@@ -1,5 +1,5 @@
 import { createUser } from '../api/user'
-import { getAvailableUsername } from '../util'
+import getAvailableUsername from '../utils/assignUsername'
 import config from '../../../config/server-config'
 import mongoose from 'mongoose'
 
@@ -14,7 +14,10 @@ export function isLoggedIn (req, res, next) {
 
 function authenticateSignin(passport, req, res, next) {
     passport.authenticate('local-login', (err, user, info) => {
-        console.log(user)
+        console.log('local-login')
+        console.log('user: ' + user)
+        console.log('err: ' + err)
+        console.log('info: ' + info)
         if (err) { 
             return next(err)
         }
@@ -52,12 +55,12 @@ function addAuthRoutes(app, passport) {
                 
                 return createUser(email.toLowerCase(), password, username, firstname, lastname) 
             })
-            .then((err, user) => {
+            .then(user => {
                 // why is error object passed as the first argument from createUser promise
                 // when it isn't in config/passport.js?
                 // TODO add error handling
                 console.log('at createUser callback')
-                console.log(user)
+                console.log('user: ' + user)
                 authenticateSignin(passport, req, res, next)
             })
             .catch(err => {

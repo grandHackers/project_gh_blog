@@ -1,8 +1,8 @@
 import LocalPassport from 'passport-local'
 import GooglePassport from 'passport-google-oauth'
-import authConfig from '../../../config/auth'
-import { getUserById, getUserByEmail, getUserByUsername, createUser } from '../api/user'
-import { getAvailableUsername } from '../util'
+import authConfig from '../../config/auth'
+import { getUserById, getUserByEmail, getUserByUsername, createUser } from './api/user'
+import getAvailableUsername from './utils/assignUsername'
 import mongoose from 'mongoose' 
 import faker from 'faker'
 
@@ -50,6 +50,7 @@ function configurePassport(passport) {
                 const email = username 
                 getUserByEmail(email).then(user => {
                     console.log('authenticating. user: ' + user)
+                    console.log(user.verifyPassword)
                     if (!user) {
                         return done(null, false, { message: 'Incorrect email.' }) 
                     }

@@ -1,8 +1,8 @@
 var Promise = require('promise');
 var faker = require('faker')
-import { getUserByUsername } from './api/user'
+import { getUserByUsername } from '../api/user'
 
-export function getAvailableUsername(defaultUsername) {
+export default function getAvailableUsername(defaultUsername) {
     var username = defaultUsername
     const minLength = 4
     if (username.length < minLength) {
