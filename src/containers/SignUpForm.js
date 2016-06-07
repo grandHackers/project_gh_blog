@@ -49,12 +49,10 @@ const validate = values => {
             validateMaxLength(20)(password))
     }
     if (!!firstname) {
-        errors.firstname = (validateMinLength(4)(firstname) || 
-            validateMaxLength(35)(firstname))
+        errors.firstname =validateMaxLength(35)(firstname)
     }
     if (!!lastname) {
-        errors.lastname = (validateMinLength(4)(lastname) || 
-            validateMaxLength(35)(lastname))
+        errors.lastname = validateMaxLength(35)(lastname)
     }
 
     return errors
